@@ -1,0 +1,48 @@
+---
+/**
+ * Capacity scarcity — the honest kind.
+ *
+ * Stufe 1 is delivered by hand within 5 Werktage, so intake really is capped.
+ * Keep MONTHLY_SLOTS / SLOTS_TAKEN in sync with what you can actually deliver:
+ * a claim you cannot back up is irreführende Werbung under §5 UWG, and this
+ * audience (GF, PDL, QMB) is exactly the kind that will ask.
+ *
+ * Deliberately NOT a resetting countdown timer — a clock that starts over on
+ * reload reads as a trick to a compliance-minded buyer and costs more trust
+ * than it buys urgency.
+ */
+interface Props {
+  /** Renders as a full-width band instead of an inline badge. */
+  variant?: 'badge' | 'band';
+  class?: string;
+}
+
+const { variant = 'badge', class: className = '' } = Astro.props;
+
+const MONTHLY_SLOTS = 10;
+const SLOTS_TAKEN = 7;
+
+const slotsLeft = Math.max(0, MONTHLY_SLOTS - SLOTS_TAKEN);
+const monat = new Date().toLocaleDateString('de-DE', { month: 'long' });
+---
+{variant === 'badge' ? (
+  <span class={`tag tag-stamp ${className}`}>
+    <span class="inline-block h-1.5 w-1.5 bg-stamp"></span>
+    Noch {slotsLeft} von {MONTHLY_SLOTS} Plätzen im {monat}
+  </span>
+) : (
+  <div class={`border-[1.5px] border-stamp bg-paper p-5 sm:p-6 ${className}`}>
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+      <span class="font-display text-4xl font-black text-stamp leading-none shrink-0">{slotsLeft}</span>
+      <div>
+        <p class="font-display text-lg font-bold text-ink leading-snug">
+          freie Plätze für die kostenlose Fallbearbeitung im {monat}
+        </p>
+        <p class="mt-1 text-sm text-ink-soft leading-relaxed">
+          Jeder Fall wird von Hand geprüft — deshalb nehmen wir pro Monat {MONTHLY_SLOTS} neue Häuser auf.
+          Ist der Monat voll, rücken Einreichungen in den Folgemonat.
+        </p>
+      </div>
+    </div>
+  </div>
+)}

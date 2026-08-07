@@ -1,0 +1,33 @@
+---
+/**
+ * Hidden attribution fields for every Formspree form.
+ *
+ * Without these we cannot compute "cost per completed Block A" — the first
+ * kill-criterion in MARKETING.md. Values are filled client-side by the
+ * first-touch attribution script in layouts/Site.astro, which persists UTMs in
+ * localStorage so a lead that lands on / and converts on /kontakt still carries
+ * the ad that paid for it.
+ *
+ * `tier` records which offer box the submission came from, so Formspree
+ * submissions are separable per rung of the ladder without reading the URL.
+ */
+interface Props {
+  /** Which rung of the ladder this form belongs to. */
+  tier: 'starthilfe' | 'notfallkit' | 'stufe1' | 'stufe2' | 'stufe3' | 'pilot' | 'allgemein';
+}
+
+const { tier } = Astro.props;
+const landingPage = Astro.url.pathname;
+---
+<input type="hidden" name="tier" value={tier} />
+<input type="hidden" name="landing_page" value={landingPage} />
+<input type="hidden" name="utm_source" data-track-field="utm_source" value="" />
+<input type="hidden" name="utm_medium" data-track-field="utm_medium" value="" />
+<input type="hidden" name="utm_campaign" data-track-field="utm_campaign" value="" />
+<input type="hidden" name="utm_content" data-track-field="utm_content" value="" />
+<input type="hidden" name="utm_term" data-track-field="utm_term" value="" />
+<input type="hidden" name="ad_click_id" data-track-field="ad_click_id" value="" />
+<input type="hidden" name="referrer" data-track-field="referrer" value="" />
+<input type="hidden" name="first_seen" data-track-field="first_seen" value="" />
+<!-- Honeypot: bots fill it, humans never see it. -->
+<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" />

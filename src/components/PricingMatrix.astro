@@ -1,0 +1,221 @@
+---
+/**
+ * Row-wise tier comparison.
+ *
+ * Replaces the previous four independent cards: a buyer could not compare
+ * like-for-like because features were not aligned across tiers. Every row here
+ * is answered by every tier — including with "—", which is itself information.
+ */
+// Everything is Formspree for now — the paid rungs collect an order via form
+// and are invoiced by hand. Swap these anchors for payment links later.
+const tiers = [
+  {
+    key: 'starthilfe',
+    name: 'Starthilfe',
+    price: '€0',
+    priceNote: 'keine Dateneingabe',
+    cta: 'Vorlagen holen',
+    href: '#starthilfe',
+    highlight: false,
+  },
+  {
+    key: 'notfallkit',
+    name: 'Notfallkit',
+    price: '€19',
+    priceNote: 'einmalig',
+    cta: 'Kit bestellen',
+    href: '#notfallkit',
+    highlight: false,
+  },
+  {
+    key: 'stufe1',
+    name: 'Stufe 1 · KI-Prüfvorbereitung',
+    price: '€49',
+    priceNote: 'pro Fall · erste 3 gratis',
+    cta: 'Fall einreichen',
+    href: '#fall-hochladen',
+    highlight: true,
+  },
+  {
+    key: 'stufe2',
+    name: 'Stufe 2 · Human-Check',
+    price: '€390',
+    priceNote: '5 Fälle · ≈ €78/Fall',
+    cta: 'Paket buchen',
+    href: '#stufe-2',
+    highlight: false,
+  },
+  {
+    key: 'stufe3',
+    name: 'Stufe 3 · Audit',
+    price: '€1.900',
+    priceNote: 'einmalig',
+    cta: 'Audit anfragen',
+    href: '/kontakt?interesse=stufe3',
+    highlight: false,
+  },
+];
+
+// One entry per tier, in the same order as `tiers`.
+const rows = [
+  {
+    label: 'Für wen',
+    values: [
+      'Wer erst die Verträge klären muss',
+      'Wer heute selbst antworten muss',
+      'Wer laufend Prüfanfragen hat',
+      'Wer bei jedem Fall abgesichert sein will',
+      'Wer den Prozess grundsätzlich umbauen will',
+    ],
+  },
+  {
+    label: 'Prüfanfragen inklusive',
+    values: ['—', '—', '3 kostenlos, dann €49/Fall', '5 Fälle', '5 Fälle'],
+  },
+  {
+    label: 'KI-Entwurf mit Quellenverweisen',
+    values: ['—', '—', 'ja', 'ja', 'ja'],
+  },
+  {
+    label: 'Prüfung durch registrierte Pflegefachkraft',
+    values: ['—', '—', '—', 'jeder Fall', 'jeder Fall'],
+  },
+  {
+    label: '§203-Mustervereinbarung & Muster-AVV',
+    values: ['als Muster', 'als Muster', 'unterschriebene AVV', 'unterschriebene AVV', 'unterschriebene AVV'],
+  },
+  {
+    label: 'Eigene Antwortvorlagen & Fristenübersicht',
+    values: ['—', 'ja', 'ja', 'ja', 'ja'],
+  },
+  {
+    label: 'Workflow-Audit, MDR-Einordnung, ROI-Rechnung',
+    values: ['—', '—', '—', '—', 'ja'],
+  },
+  {
+    label: 'Bearbeitungszeit',
+    values: ['sofort', 'sofort', 'i. d. R. 5 Werktage', 'i. d. R. 5 Werktage', '2–3 Wochen'],
+  },
+  {
+    label: 'Abrechnung',
+    values: ['—', 'Rechnung per E-Mail', 'Rechnung nach Lieferung', 'Rechnung, Vorkasse', 'Rechnung'],
+  },
+];
+
+const isNegative = (v: string) => v === '—';
+---
+<section id="preise" class="py-20 bg-paper-deep border-y-[1.5px] border-line scroll-mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mb-12">
+      <span class="tag tag-az">Preise</span>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">
+        Der ganze Weg auf einen Blick
+      </h2>
+      <p class="mt-3 text-lg text-ink-soft">
+        Fünf Stufen, jede einzeln buchbar — vom kostenlosen Download bis zum vollständigen Audit.
+        Keine Mindestlaufzeit, kein Abo, kein Upgrade-Zwang.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto border-[1.5px] border-ink/80 bg-paper">
+      <table class="w-full min-w-[64rem] text-sm text-left border-collapse">
+        <caption class="sr-only">Vergleich aller fünf Angebotsstufen</caption>
+        <thead>
+          <tr class="border-b-[1.5px] border-ink/80">
+            <th scope="col" class="px-5 py-5 align-bottom font-mono text-[11px] text-ink-faint uppercase tracking-widest font-semibold w-[19%]">
+              Leistung
+            </th>
+            {tiers.map(t => (
+              <th
+                scope="col"
+                class={`px-5 py-5 align-bottom w-[16.2%] ${t.highlight ? 'bg-ink text-paper' : ''}`}
+              >
+                {t.highlight && (
+                  <span class="inline-block mb-2 font-mono text-[10px] uppercase tracking-widest text-gold-light">
+                    Beliebteste Wahl
+                  </span>
+                )}
+                <div class={`font-display text-sm font-bold leading-snug ${t.highlight ? 'text-paper' : 'text-ink'}`}>
+                  {t.name}
+                </div>
+                <div class={`mt-2 font-display text-2xl font-black leading-none ${t.highlight ? 'text-gold-light' : 'text-ink'}`}>
+                  {t.price}
+                </div>
+                <div class={`mt-1 font-mono text-[10px] ${t.highlight ? 'text-paper/55' : 'text-ink-faint'}`}>
+                  {t.priceNote}
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr class={ri !== rows.length - 1 ? 'border-b border-line' : ''}>
+              <th scope="row" class="px-5 py-4 font-semibold text-ink align-top text-left">{row.label}</th>
+              {row.values.map((v, ti) => (
+                <td
+                  class={`px-5 py-4 align-top ${
+                    tiers[ti].highlight
+                      ? 'bg-ink/[0.04] text-ink font-medium'
+                      : isNegative(v)
+                        ? 'text-ink-faint'
+                        : 'text-ink-soft'
+                  }`}
+                >
+                  {v}
+                </td>
+              ))}
+            </tr>
+          ))}
+          <tr class="border-t-[1.5px] border-ink/80">
+            <td class="px-5 py-5"></td>
+            {tiers.map(t => (
+              <td class={`px-5 py-5 align-top ${t.highlight ? 'bg-ink/[0.04]' : ''}`}>
+                <a
+                  href={t.href}
+                  data-tier-cta={t.key}
+                  class={`inline-flex w-full items-center justify-center gap-1.5 px-3 py-2.5 text-sm font-semibold transition-colors ${
+                    t.highlight
+                      ? 'text-paper bg-stamp hover:bg-[color-mix(in_srgb,var(--color-stamp)_88%,black)]'
+                      : 'text-ink border-[1.5px] border-ink/80 hover:bg-ink hover:text-paper'
+                  }`}
+                >
+                  {t.cta}
+                </a>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-4 font-mono text-xs text-ink-faint">
+      Alle Preise zzgl. USt. · Der Preis des Notfallkits wird auf Ihren ersten kostenpflichtigen Fall angerechnet.
+    </p>
+
+    <!-- The top of the ladder: previously mentioned only in body copy, with no price card and no CTA. -->
+    <div class="mt-10 border-[1.5px] border-gold bg-ink text-paper p-7 sm:p-9 flex flex-col lg:flex-row lg:items-center gap-7">
+      <div class="flex-1">
+        <span class="tag tag-gold">Danach · Pilotprojekt</span>
+        <h3 class="mt-4 font-display text-2xl font-black tracking-tight">Vom Audit zum laufenden Betrieb</h3>
+        <p class="mt-3 text-paper/75 leading-relaxed max-w-2xl">
+          Wenn das Audit zeigt, dass sich der Umbau rechnet: Wir übernehmen die Prüfanfragen-Bearbeitung
+          als laufenden Prozess — Anbindung an Ihr Pflegedoku-System, feste Durchlaufzeiten, monatliches
+          Reporting. Umfang und Preis ergeben sich aus dem Audit.
+        </p>
+      </div>
+      <div class="shrink-0 lg:text-right">
+        <div class="font-mono text-xs uppercase tracking-widest text-paper/50">Rahmen</div>
+        <div class="mt-1 font-display text-4xl font-black text-gold-light">€8.000–15.000</div>
+        <a
+          href="/kontakt?interesse=pilot"
+          data-tier-cta="pilot"
+          class="mt-5 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold text-ink bg-gold-light hover:bg-[color-mix(in_srgb,var(--color-gold-light)_88%,white)] transition-colors"
+        >
+          Pilotprojekt besprechen
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

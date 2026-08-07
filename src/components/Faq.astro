@@ -1,0 +1,80 @@
+---
+/**
+ * Objection handling. Sits between the offer and the pricing table so the
+ * blockers ("darf ich das überhaupt?", "was, wenn der Entwurf nichts taugt?")
+ * are answered before the price is read, not after.
+ */
+const faqs = [
+  {
+    q: 'Dürfen wir Patientenunterlagen überhaupt an Sie geben?',
+    a: 'Für die kostenlosen Testfälle laden Sie ausschließlich geschwärzte Unterlagen hoch — dann liegt kein Berufsgeheimnis im Sinne des §203 StGB bei uns. Für den laufenden Betrieb schließen wir vorab eine §203-Vereinbarung und eine AVV nach Art. 28 DSGVO. Beide Muster können Sie oben kostenlos herunterladen und vorab von Ihrer Datenschutzbeauftragten prüfen lassen.',
+  },
+  {
+    q: 'Was passiert, wenn der Entwurf nichts taugt?',
+    a: 'Dann sagen Sie es uns und der Fall zählt nicht gegen Ihr Kontingent — bei den kostenlosen Fällen ohnehin nicht, bei kostenpflichtigen Fällen stellen wir ihn nicht in Rechnung. Sie tragen kein Risiko außer der Zeit für den Upload.',
+  },
+  {
+    q: 'Entscheidet hier eine KI über einen Pflegegrad?',
+    a: 'Nein. Wir erstellen einen Entwurf, den Sie prüfen, ergänzen und selbst versenden — Sie bleiben der Absender und die verantwortliche Stelle. Es geht nichts automatisiert an Kasse oder MD. Das ist auch der Grund, warum das keine automatisierte Entscheidung im Sinne des Art. 22 DSGVO ist.',
+  },
+  {
+    q: 'Ist das Rechtsberatung?',
+    a: 'Nein. Wir unterstützen bei der organisatorischen und redaktionellen Aufbereitung Ihrer eigenen Dokumentation. Die rechtliche Bewertung des Einzelfalls bleibt bei Ihnen oder Ihrer Rechtsberatung. Details im RDG-Hinweis.',
+  },
+  {
+    q: 'Unsere Pflegedokumentation ist auf Papier. Geht das trotzdem?',
+    a: 'Ja. Gescannte oder abfotografierte Unterlagen reichen, solange sie lesbar sind. Papier ist einer der häufigsten Fälle — deshalb fragen wir im Formular danach.',
+  },
+  {
+    q: 'Die Frist läuft in zwei Tagen. Können Sie da noch helfen?',
+    a: 'Möglicherweise. Die reguläre Bearbeitung dauert in der Regel 5 Werktage; Eilfälle ziehen wir vor, solange Kapazität frei ist — tragen Sie das Fristende im Formular ein. Wenn es für den Standardweg zu knapp ist, ist das Fristen-Notfallkit die schnellere Option: Vorlagen, mit denen Sie heute selbst antworten.',
+  },
+  {
+    q: 'Müssen wir uns binden?',
+    a: 'Nein. Jede Stufe ist einzeln buchbar, es gibt keine Mindestlaufzeit, kein Abo und keinen automatischen Übergang in eine kostenpflichtige Stufe. Nach den drei kostenlosen Fällen passiert nichts, bis Sie einen weiteren Fall einreichen.',
+  },
+];
+---
+<section id="faq" class="py-20 bg-paper scroll-mt-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mb-12">
+      <span class="tag tag-az">Bevor Sie fragen</span>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">
+        Die Einwände, die wir jede Woche hören
+      </h2>
+    </div>
+
+    <div class="border-[1.5px] border-ink/80 divide-y divide-line">
+      {faqs.map((f, i) => (
+        <details class="group" open={i === 0}>
+          <summary class="flex items-start justify-between gap-5 cursor-pointer list-none p-5 sm:p-6 hover:bg-paper-deep transition-colors">
+            <h3 class="font-display text-base sm:text-lg font-bold text-ink leading-snug">{f.q}</h3>
+            <svg
+              class="h-5 w-5 shrink-0 mt-0.5 text-stamp transition-transform group-open:rotate-45"
+              viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" d="M10 4v12M4 10h12" />
+            </svg>
+          </summary>
+          <p class="px-5 sm:px-6 pb-6 -mt-1 text-ink-soft leading-relaxed max-w-3xl">{f.a}</p>
+        </details>
+      ))}
+    </div>
+
+    <!-- Risk reversal, stated once and plainly, right before the price. -->
+    <div class="mt-10 border-[1.5px] border-file bg-paper-deep p-6 sm:p-8 flex flex-col sm:flex-row gap-5">
+      <svg class="h-8 w-8 shrink-0 text-file" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+      </svg>
+      <div>
+        <h3 class="font-display text-xl font-bold text-ink">Unbrauchbarer Entwurf, keine Rechnung.</h3>
+        <p class="mt-2 text-ink-soft leading-relaxed">
+          Wenn ein Entwurf Ihnen nicht weiterhilft, sagen Sie uns das formlos innerhalb von 14 Tagen —
+          der Fall wird nicht berechnet und zählt nicht gegen Ihr Kontingent. Keine Begründung nötig,
+          keine Rückfragen.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

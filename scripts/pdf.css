@@ -1,0 +1,126 @@
+<style>
+  /* Print styling for the Starthilfe templates. Mirrors the site's paper/ink
+     palette from src/styles/global.css so the downloads look like the brand. */
+  @page {
+    size: A4;
+    margin: 20mm 18mm 22mm 18mm;
+  }
+
+  :root {
+    --paper: #f4f2ea;
+    --paper-deep: #eae5d6;
+    --ink: #15181b;
+    --ink-soft: #4b5259;
+    --ink-faint: #7c828a;
+    --stamp: #9a2c1c;
+    --line: #d9d4c6;
+  }
+
+  html {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    background: #fff;
+    max-width: none;
+    margin: 0;
+  }
+
+  h1 {
+    font-family: Archivo, "Segoe UI", system-ui, sans-serif;
+    font-size: 19pt;
+    line-height: 1.15;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 4mm;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  h2 {
+    font-family: Archivo, "Segoe UI", system-ui, sans-serif;
+    font-size: 13pt;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 8mm 0 2mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 1px solid var(--line);
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: Archivo, "Segoe UI", system-ui, sans-serif;
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--stamp);
+    margin: 6mm 0 1.5mm;
+    break-after: avoid;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 4mm 0 1mm;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 3mm; }
+
+  strong { color: var(--ink); font-weight: 600; }
+
+  a { color: var(--stamp); text-decoration: none; }
+
+  /* The "ENTWURF — juristisch prüfen" disclaimer that opens every template. */
+  blockquote {
+    margin: 0 0 6mm;
+    padding: 4mm 5mm;
+    background: var(--paper-deep);
+    border-left: 3px solid var(--stamp);
+    font-size: 9.5pt;
+    color: var(--ink);
+    break-inside: avoid;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 3mm; padding-left: 6mm; }
+  li { margin-bottom: 1.2mm; }
+  ol > li::marker { color: var(--stamp); font-weight: 600; }
+  ul > li::marker { color: var(--stamp); }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 6mm 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 0 0 4mm;
+    break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 2mm 3mm;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--paper-deep); color: var(--ink); font-weight: 600; }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 9pt;
+    color: var(--stamp);
+  }
+
+  /* Signature blanks etc. shouldn't be split across pages. */
+  h2, h3, h4 { page-break-after: avoid; }
+</style>

@@ -1,0 +1,77 @@
+---
+/**
+ * Order form for the paid rungs (Notfallkit €19, Human-Check-Paket €390).
+ *
+ * No payment provider yet — this collects the order over Formspree and you
+ * invoice by hand. The `tier` hidden field (via TrackingFields) is what makes a
+ * submission attributable to the box it came from, so keep it distinct per rung.
+ */
+import TrackingFields from './TrackingFields.astro';
+
+interface Props {
+  tier: 'notfallkit' | 'stufe2';
+  /** Query flag the success banner on the page listens for. */
+  successFlag: string;
+  /** Anchor to scroll to after the Formspree redirect. */
+  successAnchor: string;
+  submitLabel: string;
+  /** Fine print under the button. */
+  note: string;
+  /** Dark button for the Stufe-2 (file-green) box, stamp red elsewhere. */
+  accent?: 'stamp' | 'file';
+}
+
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_BESTELLUNG_ID || 'REPLACE_WITH_FORMSPREE_ID';
+const { tier, successFlag, successAnchor, submitLabel, note, accent = 'stamp' } = Astro.props;
+const landingPage = Astro.url.pathname;
+
+const buttonClass =
+  accent === 'file'
+    ? 'text-paper bg-file hover:bg-file-bright'
+    : 'text-paper bg-stamp hover:bg-[color-mix(in_srgb,var(--color-stamp)_88%,black)]';
+---
+<form
+  action={`https://formspree.io/f/${formspreeId}`}
+  method="POST"
+  class="space-y-4"
+>
+  <input type="hidden" name="form" value="bestellung" />
+  <input type="hidden" name="_next" value={`${landingPage}?${successFlag}=1#${successAnchor}`} />
+  <TrackingFields tier={tier} />
+
+  <div>
+    <label for={`${tier}-firma`} class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">
+      Firma / Einrichtung
+    </label>
+    <input
+      id={`${tier}-firma`} name="firma" type="text" required autocomplete="organization"
+      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+      placeholder="Ambulanter Pflegedienst Muster GmbH"
+    />
+  </div>
+
+  <div>
+    <label for={`${tier}-email`} class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">
+      Geschäftliche E-Mail
+    </label>
+    <input
+      id={`${tier}-email`} name="email" type="email" required autocomplete="email"
+      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+      placeholder="sie@ihr-pflegedienst.de"
+    />
+    <p class="mt-1 font-mono text-xs text-ink-faint">An diese Adresse gehen Rechnung und Lieferung.</p>
+  </div>
+
+  <button
+    type="submit"
+    data-tier-cta={tier}
+    class={`w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold transition-all shadow-[4px_4px_0_0_var(--color-ink)] hover:shadow-[2px_2px_0_0_var(--color-ink)] hover:translate-x-[2px] hover:translate-y-[2px] ${buttonClass}`}
+  >
+    {submitLabel}
+    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+  </button>
+
+  <p class="font-mono text-xs text-ink-faint text-center leading-relaxed">
+    {note} Mit dem Absenden stimmen Sie unserer <a href="/datenschutz" class="underline hover:text-ink">Datenschutzerklärung</a> zu.
+  </p>
+</form>

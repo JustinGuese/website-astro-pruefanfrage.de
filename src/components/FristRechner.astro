@@ -1,0 +1,135 @@
+---
+/**
+ * Frist-Rechner — turns the customer's own statutory deadline into the urgency.
+ *
+ * They type the Frist from the MD/Kassen-Schreiben; we show days remaining and
+ * whether a case submitted today still lands before it (5 Werktage delivery).
+ * Honest urgency: the clock is theirs, not ours, so it survives scrutiny from a
+ * compliance-minded buyer in a way a fake countdown would not.
+ */
+---
+<div class="border-[1.5px] border-ink/80 bg-paper p-6 sm:p-8">
+  <span class="font-mono text-xs uppercase tracking-widest text-ink-faint">Frist-Rechner</span>
+  <h3 class="mt-3 font-display text-xl font-bold text-ink">Reicht die Zeit noch?</h3>
+  <p class="mt-1.5 text-sm text-ink-soft leading-relaxed">
+    Tragen Sie das Fristende aus Ihrem Schreiben ein — wir rechnen aus, ob eine Einreichung heute
+    noch rechtzeitig bei Ihnen zurück ist.
+  </p>
+
+  <div class="mt-5">
+    <label for="frist-datum" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">
+      Fristende laut Schreiben
+    </label>
+    <input
+      id="frist-datum"
+      type="date"
+      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink focus:outline-none focus:border-ink"
+    />
+  </div>
+
+  <div id="frist-ergebnis" class="mt-5 hidden" role="status" aria-live="polite">
+    <div id="frist-box" class="border-l-4 p-4">
+      <p id="frist-headline" class="font-display text-lg font-bold leading-snug"></p>
+      <p id="frist-detail" class="mt-1.5 text-sm leading-relaxed"></p>
+    </div>
+
+    <a
+      href="#fall-hochladen"
+      data-tier-cta="stufe1"
+      class="mt-4 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold text-paper bg-stamp hover:bg-[color-mix(in_srgb,var(--color-stamp)_88%,black)] transition-colors"
+    >
+      Fall jetzt kostenlos einreichen
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+    </a>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const input = document.getElementById('frist-datum');
+    if (!input) return;
+
+    const result = document.getElementById('frist-ergebnis');
+    const box = document.getElementById('frist-box');
+    const headline = document.getElementById('frist-headline');
+    const detail = document.getElementById('frist-detail');
+
+    const DELIVERY_WORKDAYS = 5;
+
+    const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+    /** Adds n Werktage (Mo–Fr) to a date. Feiertage are not modelled — the
+        copy says "in der Regel", and over-promising here is worse than a day
+        of slack. */
+    const addWorkdays = (from, n) => {
+      const d = new Date(from);
+      let added = 0;
+      while (added < n) {
+        d.setDate(d.getDate() + 1);
+        const day = d.getDay();
+        if (day !== 0 && day !== 6) added++;
+      }
+      return d;
+    };
+
+    const fmt = (d) =>
+      d.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+
+    const paint = (tone, title, text) => {
+      const tones = {
+        ok:   ['border-file', 'bg-[color-mix(in_srgb,var(--color-file)_8%,transparent)]', 'text-file'],
+        warn: ['border-gold', 'bg-[color-mix(in_srgb,var(--color-gold)_10%,transparent)]', 'text-gold'],
+        late: ['border-stamp', 'bg-[color-mix(in_srgb,var(--color-stamp)_8%,transparent)]', 'text-stamp'],
+      };
+      box.className = 'border-l-4 p-4 ' + tones[tone].slice(0, 2).join(' ');
+      headline.className = 'font-display text-lg font-bold leading-snug ' + tones[tone][2];
+      detail.className = 'mt-1.5 text-sm leading-relaxed text-ink-soft';
+      headline.textContent = title;
+      detail.textContent = text;
+      result.classList.remove('hidden');
+    };
+
+    input.addEventListener('change', () => {
+      if (!input.value) {
+        result.classList.add('hidden');
+        return;
+      }
+
+      const frist = startOfDay(new Date(input.value + 'T00:00:00'));
+      const heute = startOfDay(new Date());
+      const tage = Math.round((frist - heute) / 86400000);
+      const lieferung = addWorkdays(heute, DELIVERY_WORKDAYS);
+      const puffer = Math.round((frist - startOfDay(lieferung)) / 86400000);
+
+      if (tage < 0) {
+        paint(
+          'late',
+          'Die Frist ist bereits verstrichen.',
+          'Reichen Sie den Fall trotzdem ein — in vielen Konstellationen ist eine verspätete Stellungnahme oder ein Widerspruch noch möglich. Wir sagen Ihnen im Entwurf, worauf es dann ankommt.'
+        );
+      } else if (puffer >= 2) {
+        paint(
+          'ok',
+          `Noch ${tage} ${tage === 1 ? 'Tag' : 'Tage'} — das reicht.`,
+          `Einreichung heute → Entwurf in der Regel am ${fmt(lieferung)} bei Ihnen. Danach bleiben Ihnen ${puffer} Tage für Prüfung und Versand.`
+        );
+      } else if (puffer >= 0) {
+        paint(
+          'warn',
+          `Noch ${tage} ${tage === 1 ? 'Tag' : 'Tage'} — es wird knapp.`,
+          `Einreichung heute → Entwurf voraussichtlich am ${fmt(lieferung)}, also unmittelbar vor Fristende. Reichen Sie den Fall heute ein und vermerken Sie die Frist im Formular — wir ziehen ihn vor.`
+        );
+      } else {
+        paint(
+          'late',
+          `Noch ${tage} ${tage === 1 ? 'Tag' : 'Tage'} — zu knapp für den Standardweg.`,
+          `Der reguläre Entwurf wäre erst am ${fmt(lieferung)} fertig. Reichen Sie den Fall ein und tragen Sie die Frist ein: Eilfälle bearbeiten wir vorgezogen, sofern noch Kapazität frei ist.`
+        );
+      }
+
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'frist_rechner_used', { content_category: 'Funnel', value: tage });
+      }
+    });
+  })();
+</script>

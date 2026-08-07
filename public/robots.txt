@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Formspree bounces back to the page it came from with a success flag. Those
+# URLs render the same document, so they are excluded here as well as being
+# handled by the canonical tag.
+Disallow: /*?starthilfe=
+Disallow: /*?fall_eingereicht=
+Disallow: /*?notfallkit_bestellt=
+Disallow: /*?stufe2_bestellt=
+
+Sitemap: https://pruefanfrage.de/sitemap-index.xml
