@@ -478,6 +478,9 @@ const wasEsNichtIst = [
         document.getElementById(el)?.classList.remove('hidden');
         if (typeof window.gtag === 'function') {
           window.gtag('event', event, { content_category: 'Funnel' });
+          // Standard GA4 conversion event, fired alongside the per-tier one above
+          // so every offer box rolls up into one lead metric, not just kontakt/ratgeber.
+          window.gtag('event', 'generate_lead', { form_name: event, content_category: 'Funnel' });
         }
         if (typeof window.fbq === 'function') {
           window.fbq('track', 'Lead', { content_name: label });
