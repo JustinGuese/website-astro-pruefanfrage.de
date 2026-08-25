@@ -44,6 +44,30 @@
   --color-line: #d9d4c6;
 }
 
+@layer components {
+  /* The primary action: oxblood fill with a hard offset shadow that collapses
+     on hover, like a stamp being pressed. Four copies of this 250-character
+     class string were drifting apart across the forms. */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-canvas);
+    background: var(--color-accent);
+    box-shadow: 4px 4px 0 0 var(--color-ink);
+    transition: all 0.15s;
+  }
+  .btn-primary:hover {
+    background: color-mix(in srgb, var(--color-accent) 88%, black);
+    box-shadow: 2px 2px 0 0 var(--color-ink);
+    transform: translate(2px, 2px);
+  }
+}
+
 @layer base {
   ::selection {
     background: var(--color-stamp);

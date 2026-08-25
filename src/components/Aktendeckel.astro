@@ -1,0 +1,49 @@
+---
+/**
+ * The file-folder card beside the hero headline — a tabbed manila cover with an
+ * Aktenzeichen, what Stufe 1 includes, and the folder tab drawn as an absolutely
+ * positioned block above the card edge.
+ *
+ * This is pruefanfrage.de's identity, so it lives in the site and is passed to
+ * the shared `HeroBlock` through its aside slot. It is deliberately NOT a
+ * `variant` on the shared hero: konforme-ki puts a hash-chain diagram in the
+ * same position, and a block that tries to be both grows a flag per site.
+ *
+ * The three headline figures moved out of this card and under the CTA when the
+ * hero was unified — proof sits next to the action it supports.
+ */
+interface Props {
+  aktenzeichen?: string;
+  tier?: string;
+  items?: string[];
+}
+
+const {
+  aktenzeichen = 'AZ. PN-2026-001',
+  tier = 'STUFE 1 · KERNLEISTUNG',
+  items = [
+    'KI-Entwurf mit Quellenverweisen',
+    'Ihre Prüfung & Kontrolle',
+    'Versand bleibt bei Ihnen',
+  ],
+} = Astro.props;
+---
+<div class="relative mt-2">
+  <div class="absolute -top-3 left-6 w-32 h-6 bg-canvas-deep border-[1.5px] border-b-0 border-line"></div>
+  <div class="relative bg-canvas-deep border-[1.5px] border-ink/80 p-6 sm:p-7">
+    <div class="flex items-center justify-between pb-4 border-b border-line">
+      <span class="font-mono text-[11px] tracking-wider text-ink-faint">{aktenzeichen}</span>
+      <span class="font-mono text-[11px] tracking-wider text-ink-faint">{tier}</span>
+    </div>
+
+    <p class="mt-5 font-mono text-[11px] uppercase tracking-widest text-ink-faint">Enthalten</p>
+    <ul class="mt-3 space-y-2.5">
+      {items.map((item) => (
+        <li class="flex items-start gap-2.5 text-sm text-ink">
+          <span class="mt-1 h-1.5 w-1.5 shrink-0 bg-accent"></span>
+          {item}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>

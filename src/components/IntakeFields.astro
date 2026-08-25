@@ -11,54 +11,38 @@
  * as part of the submission that already has the user's attention — one form,
  * one submission, no second drop-off point.
  */
+import Field from '@justinguese/astro-kit/Field.astro';
 ---
 <fieldset class="border-[1.5px] border-line p-5 space-y-5">
   <legend class="px-2 font-mono text-xs uppercase tracking-wider text-ink-faint">
     Damit wir Ihre Unterlagen richtig lesen
   </legend>
 
-  <div>
-    <label for="eingangskanal" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">
-      Wie kommen Prüfanfragen bei Ihnen an?
-    </label>
-    <select id="eingangskanal" name="eingangskanal" required
-      class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink focus:outline-none focus:border-ink">
-      <option value="">Bitte wählen…</option>
-      <option value="post">Post</option>
-      <option value="fax">Fax</option>
-      <option value="email">E-Mail</option>
-      <option value="kassenportal">Kassenportal</option>
-      <option value="gemischt">Gemischt</option>
-    </select>
-  </div>
+  <Field name="eingangskanal" label="Wie kommen Prüfanfragen bei Ihnen an?"
+         type="select" prompt="Bitte wählen…" required options={[
+    { value: 'post', label: 'Post' },
+    { value: 'fax', label: 'Fax' },
+    { value: 'email', label: 'E-Mail' },
+    { value: 'kassenportal', label: 'Kassenportal' },
+    { value: 'gemischt', label: 'Gemischt' },
+  ]} />
 
-  <div>
-    <label for="pflegedoku" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">
-      In welchem System liegt Ihre Pflegedokumentation?
-    </label>
-    <select id="pflegedoku" name="pflegedoku_system" required
-      class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink focus:outline-none focus:border-ink">
-      <option value="">Bitte wählen…</option>
-      <option value="medifox">MediFox</option>
-      <option value="vivendi">Vivendi</option>
-      <option value="snap">Snap</option>
-      <option value="dan">DAN</option>
-      <option value="papier">Papier</option>
-      <option value="anderes">Anderes</option>
-    </select>
-  </div>
+  <Field id="pflegedoku" name="pflegedoku_system" label="In welchem System liegt Ihre Pflegedokumentation?"
+         type="select" prompt="Bitte wählen…" required options={[
+    { value: 'medifox', label: 'MediFox' },
+    { value: 'vivendi', label: 'Vivendi' },
+    { value: 'snap', label: 'Snap' },
+    { value: 'dan', label: 'DAN' },
+    { value: 'papier', label: 'Papier' },
+    { value: 'anderes', label: 'Anderes' },
+  ]} />
 
-  <div>
-    <label for="pdf_export" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">
-      Können Sie daraus einzelne Vorgänge als PDF exportieren?
-    </label>
-    <select id="pdf_export" name="pdf_export_moeglich" required
-      class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink focus:outline-none focus:border-ink">
-      <option value="">Bitte wählen…</option>
-      <option value="ja">Ja</option>
-      <option value="nein">Nein</option>
-      <option value="weiss_nicht">Weiß ich nicht</option>
-    </select>
-    <p class="mt-1 font-mono text-xs text-ink-faint">„Weiß ich nicht" ist eine gültige Antwort — wir finden es gemeinsam heraus.</p>
-  </div>
+  <Field id="pdf_export" name="pdf_export_moeglich" label="Können Sie daraus einzelne Vorgänge als PDF exportieren?"
+         type="select" prompt="Bitte wählen…" required
+         hint="„Weiß ich nicht“ ist eine gültige Antwort — wir finden es gemeinsam heraus."
+         options={[
+    { value: 'ja', label: 'Ja' },
+    { value: 'nein', label: 'Nein' },
+    { value: 'weiss_nicht', label: 'Weiß ich nicht' },
+  ]} />
 </fieldset>
