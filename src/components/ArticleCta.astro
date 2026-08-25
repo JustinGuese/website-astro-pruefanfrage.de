@@ -1,27 +1,24 @@
 ---
 import ArrowRight from '@justinguese/astro-kit/ArrowRight.astro';
+import FormBlock from '@justinguese/astro-kit/FormBlock.astro';
 import { site } from '../config/site';
-import { formspreeAction } from '@justinguese/astro-kit/lib/site';
 /**
  * End-of-article conversion block.
  *
  * Article traffic is colder than ad traffic, so this asks for two fields, not
  * the four of Block A on the homepage — a reader who has just spent eight
  * minutes on a Ratgeber page will trade an e-mail for the templates, but not a
- * questionnaire. The `landing_page` hidden field in TrackingFields records
- * which article produced the lead, so we still learn which topic converts.
+ * questionnaire. The `landing_page` hidden field FormBlock includes via
+ * TrackingFields records which article produced the lead, so we still learn
+ * which topic converts.
+ *
+ * The two inputs stay hand-styled rather than `<Field>`: this block sits on a
+ * dark card and `Field`'s control styling is fixed to the light canvas/ink
+ * pair, so there's nothing to hand off to for this one spot.
  *
  * Below the form the full ladder is repeated as plain links, so a reader who is
  * further along can skip the free tier and go straight to the paid rungs.
  */
-import TrackingFields from '@justinguese/astro-kit/TrackingFields.astro';
-
-interface Props {
-  /** Path of the article this block sits on — used for the Formspree redirect. */
-  pfad: string;
-}
-
-const { pfad } = Astro.props;
 
 const leiter = [
   {
@@ -77,15 +74,14 @@ const leiter = [
           keine Kreditkarte.
         </p>
 
-        <form
-          action={formspreeAction(site.formspreeId!)}
-          method="POST"
+        <FormBlock
+          formspreeId={site.formspreeId!}
+          variant="starthilfe"
+          name="ratgeber_starthilfe"
+          success={{ flag: 'starthilfe', anchor: 'starthilfe-download' }}
+          submitLabel="Vorlagen kostenlos anfordern"
           class="mt-6 space-y-3"
         >
-          <input type="hidden" name="form" value="ratgeber_starthilfe" />
-          <input type="hidden" name="_next" value={`${pfad}?starthilfe=1#starthilfe-download`} />
-          <TrackingFields variant="starthilfe" />
-
           <!-- Stacked, not side by side: this block sits in a half-width column,
                where two inputs on one row truncate their own placeholders. -->
           <div class="grid gap-3">
@@ -107,19 +103,12 @@ const leiter = [
             </div>
           </div>
 
-          <button
-            type="submit"
-            data-cta="starthilfe"
-            class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-canvas bg-accent hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,black)] transition-colors"
-          >
-            Vorlagen kostenlos anfordern
-            <ArrowRight class="h-4 w-4" />
-          </button>
+          <ArrowRight slot="submit-icon" class="h-4 w-4" />
 
-          <p class="font-mono text-[11px] text-canvas/50 text-center">
+          <p slot="note" class="font-mono text-[11px] text-canvas/50 text-center">
             Mit dem Absenden stimmen Sie unserer <a href="/datenschutz" class="underline hover:text-canvas">Datenschutzerklärung</a> zu.
           </p>
-        </form>
+        </FormBlock>
       </div>
 
       <div class="lg:border-l lg:border-canvas/15 lg:pl-12">
