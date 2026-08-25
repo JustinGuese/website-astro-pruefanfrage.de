@@ -12,19 +12,19 @@ export const KATEGORIEN = [
     slug: 'pruefungen' as const,
     label: 'Prüfungen & Fristen',
     blurb: 'Was der MD und die Kassen wissen wollen — und bis wann.',
-    accent: 'stamp' as const,
+    accent: 'accent' as const,
   },
   {
     slug: 'dokumentation' as const,
     label: 'Pflegedokumentation',
     blurb: 'Wie Einträge aussehen müssen, damit sie in der Prüfung tragen.',
-    accent: 'file' as const,
+    accent: 'support' as const,
   },
   {
     slug: 'datenschutz-ki' as const,
     label: 'Datenschutz & KI',
     blurb: '§203 StGB, AVV und was vor dem ersten KI-Upload geklärt sein muss.',
-    accent: 'gold' as const,
+    accent: 'premium' as const,
   },
 ];
 

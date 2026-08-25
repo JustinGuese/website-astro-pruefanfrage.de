@@ -9,5 +9,9 @@ export default defineConfig({
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    // Required while the kit is consumed via `npm link`: Astro keys its compile
+    // cache by resolved path, so a symlinked .astro component's scoped <style>
+    // can never be found. Harmless once installed from the registry.
+    resolve: { preserveSymlinks: true },
   },
 });

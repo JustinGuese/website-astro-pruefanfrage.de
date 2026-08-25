@@ -1,15 +1,16 @@
 ---
+import { site } from '../config/site';
 import Site from '../layouts/Site.astro';
 import Hero from '../components/Hero.astro';
-import ComparisonTable from '../components/ComparisonTable.astro';
-import BlockAForm from '../components/BlockAForm.astro';
-import BestellForm from '../components/BestellForm.astro';
-import FallEinreichenForm from '../components/FallEinreichenForm.astro';
+import ValueTable from '../components/ValueTable.astro';
+import LeadMagnetForm from '../components/LeadMagnetForm.astro';
+import OrderForm from '../components/OrderForm.astro';
+import CaseSubmitForm from '../components/CaseSubmitForm.astro';
 import SocialProof from '../components/SocialProof.astro';
-import PricingMatrix from '../components/PricingMatrix.astro';
-import Notfallkit from '../components/Notfallkit.astro';
-import Kapazitaet from '../components/Kapazitaet.astro';
-import FristRechner from '../components/FristRechner.astro';
+import Pricing from '../components/Pricing.astro';
+import LeadMagnet from '../components/LeadMagnet.astro';
+import ScarcityBar from '../components/ScarcityBar.astro';
+import DeadlineCalculator from '../components/DeadlineCalculator.astro';
 import Faq from '../components/Faq.astro';
 import { alleArtikel, kategorieOf } from '../lib/ratgeber';
 
@@ -64,7 +65,7 @@ const wasEsNichtIst = [
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "pruefanfrage.de",
-    "url": "https://pruefanfrage.de",
+    "url": `${site.url}`,
     "parentOrganization": {
       "@type": "Organization",
       "name": "DataFortress.cloud GmbH"
@@ -84,28 +85,28 @@ const wasEsNichtIst = [
       { value: '0', label: 'Verträge nötig' }
     ]}
   >
-    <Kapazitaet slot="urgency" variant="badge" />
+    <ScarcityBar slot="urgency" variant="badge" />
     <p slot="cta-secondary" class="mt-4 text-sm text-ink-soft">
       <span>Frist läuft in wenigen Tagen? </span>
-      <a href="#frist-rechner" class="font-semibold text-stamp underline underline-offset-2 hover:text-stamp-bright">Prüfen, ob die Zeit reicht →</a>
+      <a href="#frist-rechner" class="font-semibold text-accent underline underline-offset-2 hover:text-accent-bright">Prüfen, ob die Zeit reicht →</a>
     </p>
   </Hero>
 
   <!-- 1b — Der Schmerz, konkret und beziffert. -->
-  <section id="szenarien" class="py-20 bg-paper-deep border-y-[1.5px] border-line scroll-mt-20">
+  <section id="szenarien" class="py-20 bg-canvas-deep border-y-[1.5px] border-line scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl mb-14">
-        <span class="tag tag-stamp">Das Problem</span>
+        <span class="tag tag-accent">Das Problem</span>
         <h2 class="mt-4 font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">Drei Situationen, die jede Woche passieren</h2>
         <p class="mt-3 text-lg text-ink-soft">Nicht nur Zeit steht auf dem Spiel. Jede verpasste Frist hat eine finanzielle Konsequenz.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-line border-[1.5px] border-line">
         {szenarien.map(s => (
-          <div class="bg-paper p-7 flex flex-col">
-            <span class="font-mono text-xs text-stamp font-semibold tracking-wider">{s.az}</span>
+          <div class="bg-canvas p-7 flex flex-col">
+            <span class="font-mono text-xs text-accent font-semibold tracking-wider">{s.az}</span>
             <h3 class="mt-3 font-display text-lg font-bold text-ink leading-snug">{s.title}</h3>
             <p class="mt-2.5 text-sm text-ink-soft leading-relaxed grow">{s.body}</p>
-            <p class="mt-5 pt-4 border-t border-line font-mono text-xs text-stamp font-semibold leading-relaxed">
+            <p class="mt-5 pt-4 border-t border-line font-mono text-xs text-accent font-semibold leading-relaxed">
               {s.kosten}
             </p>
           </div>
@@ -115,7 +116,7 @@ const wasEsNichtIst = [
   </section>
 
   <!-- 2 — WIE WIR DAS LÖSEN. -->
-  <section id="so-funktioniert-es" class="py-20 bg-paper scroll-mt-20">
+  <section id="so-funktioniert-es" class="py-20 bg-canvas scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl mb-14">
         <span class="tag tag-az">Die Lösung</span>
@@ -123,24 +124,24 @@ const wasEsNichtIst = [
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
         <div>
-          <span class="font-mono text-3xl font-bold text-stamp">01</span>
+          <span class="font-mono text-3xl font-bold text-accent">01</span>
           <h3 class="mt-3 font-display text-lg font-bold text-ink">Fall hochladen</h3>
           <p class="mt-2 text-ink-soft leading-relaxed">Sie senden die geschwärzte Prüfanfrage über unser sicheres Formular — rund 10 Minuten Aufwand auf Ihrer Seite.</p>
         </div>
         <div>
-          <span class="font-mono text-3xl font-bold text-stamp">02</span>
+          <span class="font-mono text-3xl font-bold text-accent">02</span>
           <h3 class="mt-3 font-display text-lg font-bold text-ink">KI-gestützter Entwurf</h3>
           <p class="mt-2 text-ink-soft leading-relaxed">Wir erstellen einen Antwortentwurf mit Quellenverweisen aus Ihrer Pflegedokumentation. In der Regel innerhalb von 5 Werktagen bei Ihnen.</p>
         </div>
         <div>
-          <span class="font-mono text-3xl font-bold text-stamp">03</span>
+          <span class="font-mono text-3xl font-bold text-accent">03</span>
           <h3 class="mt-3 font-display text-lg font-bold text-ink">Prüfung & Versand</h3>
           <p class="mt-2 text-ink-soft leading-relaxed">Sie prüfen und versenden — statt 2–4 Stunden Eigenrecherche bleiben rund 30–45 Minuten Durchsicht. Sie bleiben der Absender.</p>
         </div>
       </div>
 
-      <div class="max-w-3xl border-[1.5px] border-ink/80 bg-paper-deep p-6 sm:p-8 flex gap-4">
-        <svg class="h-6 w-6 text-stamp shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      <div class="max-w-3xl border-[1.5px] border-ink/80 bg-canvas-deep p-6 sm:p-8 flex gap-4">
+        <svg class="h-6 w-6 text-accent shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
         <p class="text-sm text-ink-soft leading-relaxed">
           <strong class="text-ink">Art. 26 AI Act & §630a BGB:</strong> Der Entwurf ist Organisationshilfe, keine automatisierte Entscheidung. Die Dokumentationspflicht nach §630a BGB und die Transparenzpflichten nach Art. 26 AI Act bleiben bei Ihnen — wir unterstützen, wir entscheiden nicht.
         </p>
@@ -148,12 +149,12 @@ const wasEsNichtIst = [
     </div>
   </section>
 
-  <section class="py-20 bg-paper-deep border-y-[1.5px] border-line">
+  <section class="py-20 bg-canvas-deep border-y-[1.5px] border-line">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl mb-12">
         <h2 class="font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">Manuell. Rohes ChatGPT. Oder richtig.</h2>
       </div>
-      <ComparisonTable />
+      <ValueTable />
     </div>
   </section>
 
@@ -161,7 +162,7 @@ const wasEsNichtIst = [
   <SocialProof />
 
   <!-- 4 — DIE ANGEBOTE, aufsteigend. Zuerst: kostenlos, ohne Dateneingabe. -->
-  <section id="starthilfe" class="py-16 sm:py-20 bg-paper scroll-mt-20">
+  <section id="starthilfe" class="py-16 sm:py-20 bg-canvas scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
         <div>
@@ -173,43 +174,43 @@ const wasEsNichtIst = [
             Datenschutzbeauftragten.
           </p>
           <div class="mt-6">
-            <BlockAForm />
+            <LeadMagnetForm />
           </div>
         </div>
 
         <div id="frist-rechner" class="scroll-mt-20 space-y-6">
-          <FristRechner />
-          <div class="border-[1.5px] border-line bg-paper-deep p-6">
+          <DeadlineCalculator />
+          <div class="border-[1.5px] border-line bg-canvas-deep p-6">
             <p class="font-mono text-xs uppercase tracking-widest text-ink-faint">Enthalten in der Starthilfe</p>
             <ul class="mt-3 space-y-2 text-sm text-ink-soft">
-              <li class="flex items-start gap-2.5"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-stamp"></span>§203-Mustervereinbarung (PDF)</li>
-              <li class="flex items-start gap-2.5"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-stamp"></span>Muster-AVV nach Art. 28 DSGVO (PDF)</li>
-              <li class="flex items-start gap-2.5"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-stamp"></span>MDR-Abgrenzungsnotiz (PDF)</li>
+              <li class="flex items-start gap-2.5"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-accent"></span>§203-Mustervereinbarung (PDF)</li>
+              <li class="flex items-start gap-2.5"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-accent"></span>Muster-AVV nach Art. 28 DSGVO (PDF)</li>
+              <li class="flex items-start gap-2.5"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-accent"></span>MDR-Abgrenzungsnotiz (PDF)</li>
             </ul>
           </div>
         </div>
       </div>
 
       <div id="starthilfe-download" class="hidden mt-10 max-w-2xl scroll-mt-20">
-        <div class="bg-paper-deep border-[1.5px] border-file p-6 sm:p-8">
-          <span class="tag tag-file">Akte freigegeben</span>
+        <div class="bg-canvas-deep border-[1.5px] border-support p-6 sm:p-8">
+          <span class="tag tag-support">Akte freigegeben</span>
           <h3 class="mt-3 font-display text-xl font-bold text-ink">Ihre Starthilfe-Akte ist bereit.</h3>
           <p class="mt-1 text-sm text-ink-soft">Entwürfe zur Prüfung durch Ihre Geschäftsführung / Datenschutzbeauftragte — siehe Hinweis in jedem Dokument.</p>
           <ul class="mt-5 space-y-3">
             <li>
-              <a href="/downloads/203-mustervereinbarung.pdf" download class="flex items-center gap-3 text-ink font-semibold hover:text-stamp">
+              <a href="/downloads/203-mustervereinbarung.pdf" download class="flex items-center gap-3 text-ink font-semibold hover:text-accent">
                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
                 §203-Mustervereinbarung (PDF)
               </a>
             </li>
             <li>
-              <a href="/downloads/muster-avv.pdf" download class="flex items-center gap-3 text-ink font-semibold hover:text-stamp">
+              <a href="/downloads/muster-avv.pdf" download class="flex items-center gap-3 text-ink font-semibold hover:text-accent">
                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
                 Muster-AVV nach Art. 28 DSGVO (PDF)
               </a>
             </li>
             <li>
-              <a href="/downloads/mdr-abgrenzungsnotiz.pdf" download class="flex items-center gap-3 text-ink font-semibold hover:text-stamp">
+              <a href="/downloads/mdr-abgrenzungsnotiz.pdf" download class="flex items-center gap-3 text-ink font-semibold hover:text-accent">
                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
                 MDR-Abgrenzungsnotiz (PDF)
               </a>
@@ -221,20 +222,20 @@ const wasEsNichtIst = [
   </section>
 
   <!-- 4b — €19: die Stufe zwischen "gratis" und "echter Fall". -->
-  <Notfallkit />
+  <LeadMagnet />
 
   <!-- 4c — STUFE 1, die Kernleistung. -->
-  <section id="ki-pruefvorbereitung" class="py-16 sm:py-20 bg-paper-deep border-y-[1.5px] border-line scroll-mt-20">
+  <section id="ki-pruefvorbereitung" class="py-16 sm:py-20 bg-canvas-deep border-y-[1.5px] border-line scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl mb-12">
-        <span class="tag tag-stamp">Die Kernleistung</span>
+        <span class="tag tag-accent">Die Kernleistung</span>
         <h2 class="mt-4 font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">KI-Prüfvorbereitung</h2>
         <p class="mt-3 text-lg text-ink-soft">Laden Sie einen anonymisierten Fall hoch — wir bereiten die Antwort vor. Quellenbelegbar, gesetzeskonform, in Ihrer Verantwortung.</p>
       </div>
 
       <div class="grid lg:grid-cols-12 gap-10 items-start">
         <div class="lg:col-span-5">
-          <div class="p-5 bg-paper border-l-4 border-stamp">
+          <div class="p-5 bg-canvas border-l-4 border-accent">
             <p class="font-mono text-xs uppercase tracking-widest text-ink-faint">Konditionen</p>
             <ul class="mt-3 space-y-2 text-sm text-ink-soft">
               <li><strong class="text-ink">Erste 3 Fälle:</strong> kostenlos</li>
@@ -244,13 +245,13 @@ const wasEsNichtIst = [
             </ul>
           </div>
 
-          <Kapazitaet variant="band" class="mt-6" />
+          <ScarcityBar variant="band" class="mt-6" />
 
-          <div class="mt-6 bg-paper border-[1.5px] border-ink/80 p-6">
+          <div class="mt-6 bg-canvas border-[1.5px] border-ink/80 p-6">
             <span class="font-mono text-xs uppercase tracking-widest text-ink-faint">Beispiel — Ablauf</span>
             <div class="mt-4 space-y-3 text-sm">
               <div class="flex items-center gap-2">
-                <span class="h-2 w-2 bg-stamp"></span>
+                <span class="h-2 w-2 bg-accent"></span>
                 <span class="text-ink">Pflegegrad-Prüfung, MD-Schreiben + Akte</span>
               </div>
               <div class="flex items-center gap-2 text-ink-faint">
@@ -258,7 +259,7 @@ const wasEsNichtIst = [
                 <span>KI-Entwurf mit Quellenangaben</span>
               </div>
               <div class="flex items-center gap-2">
-                <span class="h-2 w-2 bg-stamp"></span>
+                <span class="h-2 w-2 bg-accent"></span>
                 <span class="text-ink">Ihre Prüfung + Versand an MD</span>
               </div>
             </div>
@@ -268,29 +269,29 @@ const wasEsNichtIst = [
 
         <div id="fall-hochladen" class="lg:col-span-7 scroll-mt-20">
           <h3 class="font-display text-xl font-bold text-ink mb-4">Laden Sie einen Fall hoch</h3>
-          <FallEinreichenForm />
+          <CaseSubmitForm />
         </div>
       </div>
 
-      <div id="fall-eingereicht" class="hidden mt-10 bg-file text-paper p-6 sm:p-8 text-center border-[1.5px] border-file scroll-mt-20">
+      <div id="fall-eingereicht" class="hidden mt-10 bg-support text-canvas p-6 sm:p-8 text-center border-[1.5px] border-support scroll-mt-20">
         <h3 class="font-display text-xl font-bold">Fall eingereicht.</h3>
         <p class="mt-2">Wir bereiten den Antwortentwurf vor und senden ihn Ihnen in der Regel innerhalb von <strong>5 Werktagen</strong> per E-Mail zu.</p>
-        <p class="mt-3 text-sm text-paper/75">Falls Sie Fragen haben, erreichen Sie uns jederzeit über <a href="/kontakt" class="underline font-semibold">Kontakt</a>.</p>
+        <p class="mt-3 text-sm text-canvas/75">Falls Sie Fragen haben, erreichen Sie uns jederzeit über <a href="/kontakt" class="underline font-semibold">Kontakt</a>.</p>
       </div>
     </div>
   </section>
 
   <!-- 4d — STUFE 2: Human-Check. -->
-  <section id="stufe-2" class="py-16 sm:py-20 bg-paper scroll-mt-20">
+  <section id="stufe-2" class="py-16 sm:py-20 bg-canvas scroll-mt-20">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div id="stufe2-bestellt" class="hidden mb-8 bg-file text-paper p-6 sm:p-8 border-[1.5px] border-file">
+      <div id="stufe2-bestellt" class="hidden mb-8 bg-support text-canvas p-6 sm:p-8 border-[1.5px] border-support">
         <h3 class="font-display text-xl font-bold">Bestellung angekommen.</h3>
         <p class="mt-2">Wir senden Ihnen Rechnung und Ablaufdetails in der Regel innerhalb eines Werktages per E-Mail.</p>
       </div>
 
-      <div class="border-[1.5px] border-file bg-paper-deep grid lg:grid-cols-12">
+      <div class="border-[1.5px] border-support bg-canvas-deep grid lg:grid-cols-12">
         <div class="lg:col-span-7 p-7 sm:p-9">
-          <span class="tag tag-file">Human-Check · €390</span>
+          <span class="tag tag-support">Human-Check · €390</span>
           <h2 class="mt-4 font-display text-2xl sm:text-3xl font-black tracking-tight text-ink">Human-Check-Paket</h2>
           <p class="mt-3 text-ink-soft leading-relaxed">
             <strong class="text-ink">5 Fälle</strong> mit Prüfung durch eine registrierte Pflegefachkraft — ≈ €78 pro Fall,
@@ -303,7 +304,7 @@ const wasEsNichtIst = [
           </p>
         </div>
 
-        <div class="lg:col-span-5 bg-paper border-t-[1.5px] lg:border-t-0 lg:border-l-[1.5px] border-file p-7 sm:p-9 flex flex-col justify-center">
+        <div class="lg:col-span-5 bg-canvas border-t-[1.5px] lg:border-t-0 lg:border-l-[1.5px] border-support p-7 sm:p-9 flex flex-col justify-center">
           <span class="font-mono text-xs uppercase tracking-widest text-ink-faint">Paketpreis</span>
           <div class="mt-1 flex items-baseline gap-2">
             <span class="font-display text-5xl font-black text-ink">€390</span>
@@ -311,13 +312,13 @@ const wasEsNichtIst = [
           </div>
           <p class="mt-2 mb-5 text-sm text-ink-soft">5 Fälle · ≈ €78 pro Fall · 6 Monate gültig</p>
 
-          <BestellForm
+          <OrderForm
             tier="stufe2"
             successFlag="stufe2_bestellt"
             successAnchor="stufe-2"
             submitLabel="Paket anfragen"
             note="Sie erhalten Rechnung und Ablaufdetails per E-Mail."
-            accent="file"
+            accent="support"
           />
         </div>
       </div>
@@ -325,7 +326,7 @@ const wasEsNichtIst = [
   </section>
 
   <!-- 5 — VERTRAUEN & EINWÄNDE, direkt vor dem Preis. -->
-  <section class="py-20 bg-paper-deep border-y-[1.5px] border-line">
+  <section class="py-20 bg-canvas-deep border-y-[1.5px] border-line">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl mb-14">
         <h2 class="font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">Was es NICHT ist</h2>
@@ -341,7 +342,7 @@ const wasEsNichtIst = [
         ))}
       </div>
       <p class="mt-10 font-mono text-xs text-ink-faint">
-        Details siehe <a href="/rdg-hinweis" class="text-stamp font-semibold hover:underline">RDG-Hinweis</a>.
+        Details siehe <a href="/rdg-hinweis" class="text-accent font-semibold hover:underline">RDG-Hinweis</a>.
       </p>
     </div>
   </section>
@@ -349,7 +350,7 @@ const wasEsNichtIst = [
   <Faq />
 
   <!-- 5b — RATGEBER. Internal links from the strongest page on the domain. -->
-  <section id="ratgeber" class="py-20 bg-paper border-t-[1.5px] border-line scroll-mt-20">
+  <section id="ratgeber" class="py-20 bg-canvas border-t-[1.5px] border-line scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div class="max-w-2xl">
@@ -362,7 +363,7 @@ const wasEsNichtIst = [
             tragen muss — ohne Anmeldung lesbar.
           </p>
         </div>
-        <a href="/ratgeber" class="shrink-0 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-stamp hover:gap-3 transition-all">
+        <a href="/ratgeber" class="shrink-0 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-accent hover:gap-3 transition-all">
           Alle Beiträge
           <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
         </a>
@@ -370,11 +371,11 @@ const wasEsNichtIst = [
 
       <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 border-t-[1.5px] border-l-[1.5px] border-line">
         {ratgeberTeaser.map(a => (
-          <a href={`/ratgeber/${a.id}`} class="group bg-paper p-6 border-r-[1.5px] border-b-[1.5px] border-line hover:bg-paper-deep transition-colors flex flex-col">
+          <a href={`/ratgeber/${a.id}`} class="group bg-canvas p-6 border-r-[1.5px] border-b-[1.5px] border-line hover:bg-canvas-deep transition-colors flex flex-col">
             <span class="font-mono text-[10px] uppercase tracking-widest text-ink-faint">
               {kategorieOf(a.data.category).label} · {a.data.readingTime} Min.
             </span>
-            <h3 class="mt-3 font-display text-lg font-bold text-ink leading-snug group-hover:text-stamp transition-colors">
+            <h3 class="mt-3 font-display text-lg font-bold text-ink leading-snug group-hover:text-accent transition-colors">
               {a.data.title}
             </h3>
             <p class="mt-2.5 text-sm text-ink-soft leading-relaxed grow">{a.data.description}</p>
@@ -384,7 +385,7 @@ const wasEsNichtIst = [
     </div>
   </section>
 
-  <section class="py-16 bg-paper-deep border-y-[1.5px] border-line">
+  <section class="py-16 bg-canvas-deep border-y-[1.5px] border-line">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <p class="font-display text-2xl sm:text-3xl font-bold text-ink leading-snug">
         „Die Software macht die Arbeit schnell.<br class="hidden sm:block" /> Der Vertrag macht sie erlaubt.“
@@ -393,44 +394,44 @@ const wasEsNichtIst = [
   </section>
 
   <!-- 6 — PREISVERGLEICH, alle Stufen nebeneinander. -->
-  <PricingMatrix />
+  <Pricing />
 
   <!-- 7 — STUFE 3 & letzter Call to Action. -->
-  <section id="stufe-3" class="py-24 bg-ink text-paper scroll-mt-20">
+  <section id="stufe-3" class="py-24 bg-ink text-canvas scroll-mt-20">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-12 gap-12 items-start">
         <div class="lg:col-span-7">
-          <span class="tag tag-gold">Stufe 3 · Der vollständige Fall</span>
+          <span class="tag tag-premium">Stufe 3 · Der vollständige Fall</span>
           <h2 class="mt-5 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.05]">Compliance- & Workflow-Check</h2>
-          <p class="mt-5 text-lg text-paper/75 leading-relaxed max-w-xl">
+          <p class="mt-5 text-lg text-canvas/75 leading-relaxed max-w-xl">
             Remote- oder Vor-Ort-Audit Ihres kompletten Prüfanfragen-Workflows — Posteingang, Exportwege, §203/AVV-Reife, MDR-Einordnung, ROI-Rechnung. Der Schritt, der zeigt, ob ein Pilotprojekt (€8.000–15.000) für Sie funktioniert.
           </p>
 
           <ul class="mt-8 space-y-3">
-            <li class="flex items-start gap-3 text-paper/90">
-              <span class="mt-2 h-1.5 w-1.5 shrink-0 bg-gold-light"></span>
+            <li class="flex items-start gap-3 text-canvas/90">
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 bg-premium-bright"></span>
               Audit: Posteingang, Exportwege, §203/AVV-Reife
             </li>
-            <li class="flex items-start gap-3 text-paper/90">
-              <span class="mt-2 h-1.5 w-1.5 shrink-0 bg-gold-light"></span>
+            <li class="flex items-start gap-3 text-canvas/90">
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 bg-premium-bright"></span>
               MDR-Einordnung & ROI-Rechnung
             </li>
-            <li class="flex items-start gap-3 text-paper/90">
-              <span class="mt-2 h-1.5 w-1.5 shrink-0 bg-gold-light"></span>
+            <li class="flex items-start gap-3 text-canvas/90">
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 bg-premium-bright"></span>
               5 bearbeitete Prüfanfragen inklusive
             </li>
           </ul>
 
-          <div class="mt-9 border-t border-paper/15 pt-7">
+          <div class="mt-9 border-t border-canvas/15 pt-7">
             <p class="font-display text-xl font-bold">Noch nicht so weit?</p>
-            <p class="mt-2 text-paper/70 leading-relaxed max-w-xl">
+            <p class="mt-2 text-canvas/70 leading-relaxed max-w-xl">
               Dann fangen Sie unten an, wo es nichts kostet: drei Fälle kostenlos, keine Karte,
               keine Bindung. Die Frist auf Ihrem Schreiben läuft ohnehin weiter.
             </p>
             <a
               href="#fall-hochladen"
-              data-tier-cta="stufe1"
-              class="mt-5 inline-flex items-center gap-2 px-6 py-3.5 text-base font-semibold text-ink bg-paper hover:bg-white transition-colors"
+              data-cta="stufe1"
+              class="mt-5 inline-flex items-center gap-2 px-6 py-3.5 text-base font-semibold text-ink bg-canvas hover:bg-white transition-colors"
             >
               Erste 3 Fälle kostenlos einreichen
               <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
@@ -439,20 +440,20 @@ const wasEsNichtIst = [
         </div>
 
         <div class="lg:col-span-5">
-          <div class="border-[1.5px] border-gold-light/40 p-7 sm:p-8">
-            <span class="font-mono text-xs text-paper/50 uppercase tracking-widest">Investition</span>
-            <div class="mt-2 font-display text-5xl font-black text-gold-light">€1.900</div>
-            <p class="mt-2 text-sm text-paper/60">zzgl. USt., Rechnungsstellung</p>
+          <div class="border-[1.5px] border-premium-bright/40 p-7 sm:p-8">
+            <span class="font-mono text-xs text-canvas/50 uppercase tracking-widest">Investition</span>
+            <div class="mt-2 font-display text-5xl font-black text-premium-bright">€1.900</div>
+            <p class="mt-2 text-sm text-canvas/60">zzgl. USt., Rechnungsstellung</p>
 
             <a
               href="/kontakt?interesse=stufe3"
-              data-tier-cta="stufe3"
-              class="mt-7 w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-ink bg-gold-light hover:bg-[color-mix(in_srgb,var(--color-gold-light)_88%,white)] transition-colors"
+              data-cta="stufe3"
+              class="mt-7 w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-ink bg-premium-bright hover:bg-[color-mix(in_srgb,var(--color-premium-bright)_88%,white)] transition-colors"
             >
               Audit anfragen
               <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
             </a>
-            <p class="mt-4 font-mono text-[11px] text-paper/40 text-center">AZ. PN-2026-001 · Stufe 3</p>
+            <p class="mt-4 font-mono text-[11px] text-canvas/40 text-center">AZ. PN-2026-001 · Stufe 3</p>
           </div>
         </div>
       </div>
@@ -499,18 +500,8 @@ const wasEsNichtIst = [
         }
       }
 
-      // Tier intent — mirrored to Meta so campaigns can optimise on it, not just GA.
-      document.querySelectorAll('[data-tier-cta]').forEach((el) => {
-        el.addEventListener('click', () => {
-          const tier = el.getAttribute('data-tier-cta');
-          if (typeof window.gtag === 'function') {
-            window.gtag('event', `${tier}_cta_click`, { content_category: 'Funnel' });
-          }
-          if (typeof window.fbq === 'function') {
-            window.fbq('trackCustom', 'TierCtaClick', { tier });
-          }
-        });
-      });
+      // Tier intent is tracked site-wide by the delegated listener in
+      // layouts/Site.astro — do not re-add one here, it would double-count.
     })();
   </script>
 </Site>

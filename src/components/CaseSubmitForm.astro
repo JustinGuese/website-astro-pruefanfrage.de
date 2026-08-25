@@ -1,4 +1,6 @@
 ---
+import { site } from '../config/site';
+import { formspreeAction } from '@justinguese/astro-kit/lib/site';
 /**
  * Stufe 1 — case submission.
  *
@@ -7,27 +9,26 @@
  * for an address), the Frist so Eilfälle can be pulled forward, the case
  * itself, and Block B's ingestion questions.
  */
-import TrackingFields from './TrackingFields.astro';
-import BlockBFields from './BlockBFields.astro';
+import TrackingFields from '@justinguese/astro-kit/TrackingFields.astro';
+import IntakeFields from './IntakeFields.astro';
 
-const formspreeId = 'maewgpzk';
 const landingPage = Astro.url.pathname;
 ---
 <form
-  action={`https://formspree.io/f/${formspreeId}`}
+  action={formspreeAction(site.formspreeId!)}
   method="POST"
-  class="bg-paper border-[1.5px] border-ink/80 p-6 sm:p-8 space-y-5"
+  class="bg-canvas border-[1.5px] border-ink/80 p-6 sm:p-8 space-y-5"
 >
   <input type="hidden" name="form" value="fall_einreichen" />
   <input type="hidden" name="_next" value={`${landingPage}?fall_eingereicht=1#fall-eingereicht`} />
-  <TrackingFields tier="stufe1" />
+  <TrackingFields variant="stufe1" />
 
   <div class="grid sm:grid-cols-2 gap-5">
     <div>
       <label for="fall-name" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Ansprechpartner:in</label>
       <input
         id="fall-name" name="name" type="text" required autocomplete="name"
-        class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+        class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
         placeholder="Ihr Name"
       />
     </div>
@@ -35,7 +36,7 @@ const landingPage = Astro.url.pathname;
       <label for="fall-firma" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Firma / Einrichtung</label>
       <input
         id="fall-firma" name="firma" type="text" required autocomplete="organization"
-        class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+        class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
         placeholder="Ambulanter Pflegedienst Muster GmbH"
       />
     </div>
@@ -45,7 +46,7 @@ const landingPage = Astro.url.pathname;
     <label for="fall-email" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Geschäftliche E-Mail</label>
     <input
       id="fall-email" name="email" type="email" required autocomplete="email"
-      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+      class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
       placeholder="sie@ihr-pflegedienst.de"
     />
     <p class="mt-1 font-mono text-xs text-ink-faint">An diese Adresse senden wir den fertigen Entwurf.</p>
@@ -55,7 +56,7 @@ const landingPage = Astro.url.pathname;
     <div>
       <label for="art_der_pruefung" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Art der Prüfanfrage</label>
       <select id="art_der_pruefung" name="art_der_pruefung" required
-        class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink focus:outline-none focus:border-ink">
+        class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink focus:outline-none focus:border-ink">
         <option value="">Bitte wählen…</option>
         <option value="pflegegrad_pruefung">Pflegegrad-Prüfung</option>
         <option value="sgb5_abrechnungspruefung">§275 SGB V Abrechnungsprüfung</option>
@@ -67,7 +68,7 @@ const landingPage = Astro.url.pathname;
       <label for="frist" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Fristende laut Schreiben</label>
       <input
         id="frist" name="frist" type="date"
-        class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink focus:outline-none focus:border-ink"
+        class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink focus:outline-none focus:border-ink"
       />
       <p class="mt-1 font-mono text-xs text-ink-faint">Eilfälle ziehen wir vor.</p>
     </div>
@@ -77,15 +78,15 @@ const landingPage = Astro.url.pathname;
     <label for="fall_kennung" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Interne Fall-Kennung (optional)</label>
     <input
       id="fall_kennung" name="fall_kennung" type="text"
-      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+      class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
       placeholder="z.B. PG-001, §275-042"
     />
     <p class="mt-1 font-mono text-xs text-ink-faint">Nicht der echte Patientenname — nur für Ihre interne Referenzierung.</p>
   </div>
 
-  <BlockBFields />
+  <IntakeFields />
 
-  <div class="border-[1.5px] border-line bg-paper-deep p-4">
+  <div class="border-[1.5px] border-line bg-canvas-deep p-4">
     <p class="font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Geschwärzte Dokumente</p>
     <p class="text-sm text-ink-soft leading-relaxed">Bitte noch nicht hochladen — nach dem Absenden erhalten Sie eine E-Mail; antworten Sie darauf mit den geschwärzten Dokumenten (PDF, JPG, PNG) im Anhang.</p>
   </div>
@@ -93,7 +94,7 @@ const landingPage = Astro.url.pathname;
   <div class="flex items-start gap-3">
     <input
       id="anonymity_check" name="anonymity_confirmed" type="checkbox" required
-      class="mt-1 h-5 w-5 border-[1.5px] border-line bg-paper cursor-pointer focus:outline-none focus:border-ink"
+      class="mt-1 h-5 w-5 border-[1.5px] border-line bg-canvas cursor-pointer focus:outline-none focus:border-ink"
     />
     <label for="anonymity_check" class="text-sm text-ink-soft leading-relaxed cursor-pointer">
       Ich bestätige, dass ich ausschließlich vollständig anonymisierte/pseudonymisierte Dokumente ohne direkte Patientenidentifikatoren (Namen, Geburtsdatum, Adresse, Versichertennummer) einreichen werde.
@@ -102,8 +103,8 @@ const landingPage = Astro.url.pathname;
 
   <button
     type="submit"
-    data-tier-cta="stufe1"
-    class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-paper bg-stamp hover:bg-[color-mix(in_srgb,var(--color-stamp)_88%,black)] shadow-[4px_4px_0_0_var(--color-ink)] hover:shadow-[2px_2px_0_0_var(--color-ink)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+    data-cta="stufe1"
+    class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-canvas bg-accent hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,black)] shadow-[4px_4px_0_0_var(--color-ink)] hover:shadow-[2px_2px_0_0_var(--color-ink)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
   >
     Fall kostenlos einreichen
     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>

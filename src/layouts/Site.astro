@@ -1,7 +1,14 @@
 ---
 import '../styles/global.css';
-import CookieBanner from '../components/CookieBanner.astro';
-import RatgeberMenu from '../components/RatgeberMenu.astro';
+import GuidesMenu from '../components/GuidesMenu.astro';
+import SeoHead from '@justinguese/astro-kit/SeoHead.astro';
+import Consent from '@justinguese/astro-kit/Consent.astro';
+import CookieBanner from '@justinguese/astro-kit/CookieBanner.astro';
+import Attribution from '@justinguese/astro-kit/Attribution.astro';
+import FunnelTracking from '@justinguese/astro-kit/FunnelTracking.astro';
+import StickyCta from '@justinguese/astro-kit/StickyCta.astro';
+import { organizationSchema } from '@justinguese/astro-kit/lib/seo';
+import { site } from '../config/site';
 
 interface Props {
   title?: string;
@@ -11,40 +18,14 @@ interface Props {
 }
 
 const {
-  title = "pruefanfrage.de — Prüfanfragen compliant beantworten",
-  description = "KI-gestützte, §203-konforme Unterstützung bei Pflegegrad-Prüfungen, §275 SGB V Abrechnungsprüfungen und Prüfanfragen mit Frist. Kostenloses Compliance-Paket.",
+  title = `${site.name} — Prüfanfragen compliant beantworten`,
+  description = 'KI-gestützte, §203-konforme Unterstützung bei Pflegegrad-Prüfungen, §275 SGB V Abrechnungsprüfungen und Prüfanfragen mit Frist. Kostenloses Compliance-Paket.',
   ogType = 'website',
 } = Astro.props;
-
-/**
- * Canonical URL. Built from the configured `site` rather than `Astro.url` so
- * that a page reached with tracking parameters (?utm_source=…, ?fbclid=…) or a
- * success flag (?starthilfe=1) still declares one clean address. Without this
- * every ad click would look like a separate duplicate page to a crawler.
- */
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
-
-const organisationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'pruefanfrage.de',
-  legalName: 'DataFortress.cloud GmbH',
-  url: 'https://pruefanfrage.de/',
-  description:
-    'Unterstützung für Pflegedienste, MVZ und Arztpraxen bei der Beantwortung von Prüfanfragen des Medizinischen Dienstes und der Kranken- und Pflegekassen.',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Gewerbestraße 13',
-    postalCode: '82064',
-    addressLocality: 'Straßlach-Dingharting',
-    addressCountry: 'DE',
-  },
-  areaServed: { '@type': 'Country', name: 'Deutschland' },
-};
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={site.lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -54,68 +35,35 @@ const organisationSchema = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- Primary Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
-    <meta name="author" content="pruefanfrage.de" />
+    <SeoHead
+      title={title}
+      description={description}
+      siteName={site.name}
+      locale={site.locale}
+      ogType={ogType}
+      schemas={[organizationSchema({
+        name: site.name,
+        legalName: site.legalName,
+        url: `${site.url}/`,
+        description: site.description,
+        address: site.address,
+        areaServed: site.areaServed,
+      })]}
+    />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content={ogType} />
-    <meta property="og:locale" content="de_DE" />
-    <meta property="og:site_name" content="pruefanfrage.de" />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL("/og-image.svg", Astro.url)} />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL("/og-image.svg", Astro.url)} />
-
-    <script type="application/ld+json" set:html={JSON.stringify(organisationSchema)} is:inline />
+    <!-- MUST precede anything that touches gtag. -->
+    <Consent ga4Id={site.ga4Id} metaPixelId={site.metaPixelId} />
 
     <slot name="head" />
-
-    <!-- Google tag (gtag.js) -->
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-XGG1GZH4F3"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XGG1GZH4F3');
-    </script>
-    <!-- End Google tag -->
-
-    <!-- Meta Pixel Code -->
-    <script is:inline>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '910611952102152');
-      fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=910611952102152&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
   </head>
-  <body class="bg-paper text-ink font-sans antialiased flex flex-col min-h-screen">
-    <header class="border-b-[1.5px] border-line py-3.5 relative z-50 bg-paper">
+  <body class="bg-canvas text-ink font-sans antialiased flex flex-col min-h-screen">
+    <header class="border-b-[1.5px] border-line py-3.5 relative z-50 bg-canvas">
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4">
         <a href="/" class="flex items-center gap-2 sm:gap-2.5 group shrink-0">
-          <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center bg-ink text-paper font-mono text-[11px] font-bold tracking-wide">PA</span>
-          <span class="font-display font-extrabold text-base sm:text-lg tracking-tight text-ink">pruefanfrage<span class="text-stamp">.de</span></span>
+          <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center bg-ink text-canvas font-mono text-[11px] font-bold tracking-wide">PA</span>
+          <span class="font-display font-extrabold text-base sm:text-lg tracking-tight text-ink">
+            {site.name.replace(/\.de$/, '')}<span class="text-accent">.de</span>
+          </span>
         </a>
 
         <div class="flex items-center gap-4 sm:gap-5 ml-auto">
@@ -125,10 +73,10 @@ const organisationSchema = {
             Legal links moved to the footer only, so the header stays two items
             plus the CTA.
           -->
-          <RatgeberMenu />
+          <GuidesMenu />
           <a href="/#preise" class="hidden sm:inline text-sm text-ink-soft hover:text-ink transition-colors">Preise</a>
-          <a href="/kontakt" class="hidden sm:inline text-sm text-ink-soft hover:text-ink transition-colors">Kontakt</a>
-          <a href="/#fall-hochladen" class="inline-flex shrink-0 items-center gap-2 whitespace-nowrap bg-stamp text-paper px-3 sm:px-4 py-2 text-sm font-semibold hover:bg-[color-mix(in_srgb,var(--color-stamp)_88%,black)] transition-colors">
+          <a href="/kontakt" data-contact-cta="header" class="hidden sm:inline text-sm text-ink-soft hover:text-ink transition-colors">Kontakt</a>
+          <a href="/#fall-hochladen" data-cta="stufe1" class="inline-flex shrink-0 items-center gap-2 whitespace-nowrap bg-accent text-canvas px-3 sm:px-4 py-2 text-sm font-semibold hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,black)] transition-colors">
             3 Fälle <span class="hidden sm:inline">· kostenlos</span>
           </a>
         </div>
@@ -139,119 +87,48 @@ const organisationSchema = {
       <slot />
     </main>
 
-    <footer class="bg-paper-deep border-t-[1.5px] border-line py-10 mt-12">
+    <footer class="bg-canvas-deep border-t-[1.5px] border-line py-10 mt-12">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-ink-soft">
         <div class="flex flex-wrap justify-center gap-x-5 gap-y-2">
           <a href="/ratgeber" class="hover:text-ink">Ratgeber</a>
-          <a href="/kontakt" class="hover:text-ink">Kontakt</a>
+          <a href="/kontakt" data-contact-cta="footer" class="hover:text-ink">Kontakt</a>
           <a href="/impressum" class="hover:text-ink">Impressum</a>
-          <a href="/datenschutz" class="hover:text-ink">Datenschutzerklärung</a>
+          <a href={site.privacyHref} class="hover:text-ink">Datenschutzerklärung</a>
           <a href="/agb" class="hover:text-ink">AGB</a>
           <a href="/rdg-hinweis" class="hover:text-ink">RDG-Hinweis</a>
+          <!--
+            GDPR Art. 7(3): withdrawing consent must be as easy as giving it.
+            Without this the banner is shown once per browser, ever.
+          -->
+          <button type="button" data-consent-reopen class="hover:text-ink cursor-pointer underline-offset-4 hover:underline">
+            Cookie-Einstellungen
+          </button>
         </div>
-        <p class="mt-4 font-mono text-xs text-ink-faint">&copy; {new Date().getFullYear()} DataFortress.cloud GmbH — Gewerbestraße 13, 82064 Straßlach-Dingharting</p>
+        <p class="mt-4 font-mono text-xs text-ink-faint">
+          &copy; {new Date().getFullYear()} {site.legalName} — {site.address.streetAddress}, {site.address.postalCode} {site.address.addressLocality}
+        </p>
       </div>
     </footer>
-    <CookieBanner />
 
-    <div
-      id="sticky-cta"
-      class="md:hidden fixed inset-x-0 bottom-0 z-40 translate-y-full opacity-0 transition-all duration-300 pointer-events-none"
-      aria-hidden="true"
-    >
-      <div class="bg-paper/95 backdrop-blur border-t-[1.5px] border-line shadow-[0_-4px_20px_rgba(21,24,27,0.12)] px-4 py-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)]">
-        <a
-          href="/#fall-hochladen"
-          data-tier-cta="stufe1"
-          class="flex items-center justify-center gap-2 w-full py-3.5 text-base font-semibold text-paper bg-stamp active:scale-[0.98] transition-transform"
-        >
-          Erste 3 Fälle kostenlos einreichen
-          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
-        </a>
-      </div>
-    </div>
+    <CookieBanner
+      privacyHref={site.privacyHref}
+      strings={{
+        message: 'Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und unseren Datenverkehr zu analysieren. Durch Klicken auf „Alle akzeptieren" stimmen Sie unserer Verwendung von Cookies zu.',
+        privacyLinkLabel: 'Datenschutzerklärung',
+        acceptLabel: 'Alle akzeptieren',
+        declineLabel: 'Alle ablehnen',
+        regionLabel: 'Cookie-Einwilligung',
+      }}
+    />
 
-    <!--
-      First-touch attribution.
+    <StickyCta
+      href="/#fall-hochladen"
+      cta="stufe1"
+      strings={{ ctaLabel: 'Erste 3 Fälle kostenlos einreichen' }}
+      hideNear={['fall-hochladen', 'stufe-3', 'preise']}
+    />
 
-      Stamps the UTMs (and fbclid/gclid) of the visit that first brought this
-      browser here into every Formspree form, so a lead that lands on / and
-      converts on /kontakt still carries the ad that paid for it. Without this
-      we cannot compute cost-per-lead per campaign at all.
-
-      First touch wins on purpose: later organic/direct visits must not
-      overwrite the paid click that actually acquired the lead.
-    -->
-    <script is:inline>
-      (() => {
-        const KEY = 'pn_attribution';
-        const UTMS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
-        const params = new URLSearchParams(window.location.search);
-
-        let stored = null;
-        try {
-          stored = JSON.parse(localStorage.getItem(KEY) || 'null');
-        } catch (e) {
-          stored = null;
-        }
-
-        const clickId = params.get('fbclid') || params.get('gclid') || params.get('ttclid') || '';
-        const isPaidTouch = UTMS.some(k => params.get(k)) || Boolean(clickId);
-
-        // Record when there is a campaign to record, or when we have nothing at
-        // all yet. A later organic visit never overwrites a stored paid click.
-        if (isPaidTouch || !stored) {
-          stored = {
-            ad_click_id: clickId,
-            referrer: document.referrer || '',
-            first_seen: new Date().toISOString(),
-          };
-          UTMS.forEach(k => { stored[k] = params.get(k) || ''; });
-          try { localStorage.setItem(KEY, JSON.stringify(stored)); } catch (e) { /* private mode */ }
-        }
-
-        document.querySelectorAll('[data-track-field]').forEach((el) => {
-          const field = el.getAttribute('data-track-field');
-          if (stored[field]) el.value = stored[field];
-        });
-      })();
-    </script>
-
-    <script is:inline>
-      (() => {
-        const bar = document.getElementById('sticky-cta');
-        if (!bar) return;
-        const show = () => {
-          bar.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
-          bar.setAttribute('aria-hidden', 'false');
-        };
-        const hide = () => {
-          bar.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
-          bar.setAttribute('aria-hidden', 'true');
-        };
-
-        // Hide the bar whenever a real CTA is already on screen.
-        const observed = ['fall-hochladen', 'stufe-3', 'preise']
-          .map(id => document.getElementById(id))
-          .filter(Boolean);
-
-        if ('IntersectionObserver' in window && observed.length) {
-          let visibleAnchors = 0;
-          const io = new IntersectionObserver((entries) => {
-            entries.forEach(e => { visibleAnchors += e.isIntersecting ? 1 : -1; });
-            visibleAnchors = Math.max(0, visibleAnchors);
-            if (window.scrollY > 400 && visibleAnchors === 0) show(); else hide();
-          }, { threshold: 0.05 });
-          observed.forEach(el => io.observe(el));
-          window.addEventListener('scroll', () => {
-            if (window.scrollY > 400 && visibleAnchors === 0) show(); else if (window.scrollY <= 400) hide();
-          }, { passive: true });
-        } else {
-          window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) show(); else hide();
-          }, { passive: true });
-        }
-      })();
-    </script>
+    <Attribution storageKey="pn_attribution" />
+    <FunnelTracking ctaEventName="tier_cta_click" />
   </body>
 </html>

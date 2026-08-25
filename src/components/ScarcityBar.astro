@@ -26,14 +26,14 @@ const slotsLeft = Math.max(0, MONTHLY_SLOTS - SLOTS_TAKEN);
 const monat = new Date().toLocaleDateString('de-DE', { month: 'long' });
 ---
 {variant === 'badge' ? (
-  <span class={`tag tag-stamp ${className}`}>
-    <span class="inline-block h-1.5 w-1.5 bg-stamp"></span>
+  <span class={`tag tag-accent ${className}`}>
+    <span class="inline-block h-1.5 w-1.5 bg-accent"></span>
     Noch {slotsLeft} von {MONTHLY_SLOTS} Plätzen im {monat}
   </span>
 ) : (
-  <div class={`border-[1.5px] border-stamp bg-paper p-5 sm:p-6 ${className}`}>
+  <div class={`border-[1.5px] border-accent bg-canvas p-5 sm:p-6 ${className}`}>
     <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-      <span class="font-display text-4xl font-black text-stamp leading-none shrink-0">{slotsLeft}</span>
+      <span class="font-display text-4xl font-black text-accent leading-none shrink-0">{slotsLeft}</span>
       <div>
         <p class="font-display text-lg font-bold text-ink leading-snug">
           freie Plätze für die kostenlose Fallbearbeitung im {monat}

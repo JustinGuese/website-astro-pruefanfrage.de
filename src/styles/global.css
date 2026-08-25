@@ -1,21 +1,46 @@
 @import "tailwindcss";
+@import "@justinguese/astro-kit/styles/tokens.css";
+@import "@justinguese/astro-kit/styles/prose.css";
+
+
+/* ============================================================================
+   pruefanfrage.de — "Akte"
+
+   A Prüfanfrage arrives as paper in a folder with a deadline stamped on it. So
+   the page is a file: warm paper, ink-black type, an oxblood official stamp for
+   every action and every deadline, a filed-green for what is verified, and a
+   brass reserved strictly for the top tier.
+
+   Role names come from the kit (canvas / ink / accent / support / premium);
+   only the VALUES are ours, which is what makes the markup re-skinnable.
+   ========================================================================= */
 
 @theme {
   --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 
-  --color-paper: #f4f2ea;
-  --color-paper-deep: #eae5d6;
+  --color-canvas: #f4f2ea;
+  --color-canvas-deep: #eae5d6;
+  --color-surface: #ffffff;
+
   --color-ink: #15181b;
   --color-ink-soft: #4b5259;
   --color-ink-faint: #7c828a;
-  --color-stamp: #9a2c1c;
-  --color-stamp-bright: #c23b27;
-  --color-file: #2f4a38;
-  --color-file-bright: #3f6650;
-  --color-gold: #8a6a28;
-  --color-gold-light: #e8c468;
+
+  /* The one action colour: every primary CTA, nothing decorative. */
+  --color-accent: #9a2c1c;
+  --color-accent-bright: #c23b27;
+
+  /* This site has no separate urgency colour — the stamp does both jobs. */
+  --color-signal: #9a2c1c;
+
+  --color-support: #2f4a38;
+  --color-support-bright: #3f6650;
+
+  --color-premium: #8a6a28;
+  --color-premium-bright: #e8c468;
+
   --color-line: #d9d4c6;
 }
 
@@ -56,16 +81,16 @@
   background: color-mix(in srgb, var(--color-paper-deep) 60%, transparent);
 }
 
-.tag-stamp {
+.tag-accent {
   color: var(--color-stamp);
   transform: rotate(-2deg);
 }
 
-.tag-file {
+.tag-support {
   color: var(--color-file);
 }
 
-.tag-gold {
+.tag-premium {
   color: var(--color-gold-light);
   border-color: var(--color-gold-light);
 }
@@ -99,155 +124,3 @@
   }
 }
 
-/* ---------- Long-form legal content (Impressum/Datenschutz/AGB/RDG) ---------- */
-.article-body {
-  color: var(--color-ink-soft);
-  font-size: 1.0625rem;
-  line-height: 1.75;
-}
-.article-body > * + * { margin-top: 1.1em; }
-
-.article-body h2 {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  line-height: 1.2;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: var(--color-ink);
-  margin-top: 3.5rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1.5px solid var(--color-line);
-}
-.article-body > h2:first-child { margin-top: 0; }
-
-.article-body h3 {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  line-height: 1.4;
-  font-weight: 700;
-  color: var(--color-stamp);
-  margin-top: 2.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.article-body h4 {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--color-ink);
-  margin-top: 1.75rem;
-  margin-bottom: 0.25rem;
-}
-
-/* No `.article-body p { margin: 0 }` here: at specificity (0,1,1) it outranks
-   the (0,1,0) flow rule above and collapses consecutive paragraphs into one
-   block. Tailwind's preflight already zeroes the browser default. */
-
-.article-body strong { color: var(--color-ink); font-weight: 600; }
-
-.article-body a {
-  color: var(--color-stamp);
-  text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-stamp) 35%, transparent);
-  transition: border-color .15s;
-}
-.article-body a:hover { border-bottom-color: var(--color-stamp); }
-
-.article-body ul,
-.article-body ol {
-  padding-left: 1.5rem;
-  margin: 1.1em 0;
-}
-.article-body ul { list-style: none; padding-left: 0; }
-.article-body ul > li {
-  position: relative;
-  padding-left: 1.5rem;
-  margin-top: 0.5rem;
-}
-.article-body ul > li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.7em;
-  width: 0.4rem;
-  height: 0.4rem;
-  background-color: var(--color-stamp);
-}
-.article-body ol { list-style: decimal; }
-.article-body ol > li { margin-top: 0.5rem; padding-left: 0.25rem; }
-.article-body ol > li::marker { color: var(--color-stamp); font-weight: 600; }
-
-.article-body blockquote {
-  border-left: 3px solid var(--color-ink);
-  background: var(--color-paper-deep);
-  padding: 1rem 1.25rem;
-  font-style: italic;
-  color: var(--color-ink);
-}
-
-.article-body code {
-  font-family: var(--font-mono);
-  background: var(--color-paper-deep);
-  padding: 0.15rem 0.4rem;
-  font-size: 0.9em;
-  color: var(--color-stamp);
-}
-
-.article-body hr {
-  border: 0;
-  border-top: 1.5px solid var(--color-line);
-  margin: 2.5rem 0;
-}
-
-/* Ratgeber tables. `display: block` turns the table into its own scroll
-   container so a five-column comparison never forces the page body to scroll
-   sideways on a phone — the widest column simply scrolls within the table. */
-.article-body table {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-  border-collapse: collapse;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  border: 1.5px solid var(--color-ink);
-  margin: 1.75em 0;
-}
-
-.article-body thead {
-  background: var(--color-ink);
-  color: var(--color-paper);
-}
-
-.article-body th {
-  font-family: var(--font-display);
-  font-weight: 700;
-  text-align: left;
-  padding: 0.75rem 1rem;
-  vertical-align: bottom;
-  white-space: nowrap;
-}
-
-.article-body td {
-  padding: 0.75rem 1rem;
-  vertical-align: top;
-  border-top: 1px solid var(--color-line);
-  min-width: 10rem;
-}
-
-.article-body tbody tr:nth-child(even) {
-  background: color-mix(in srgb, var(--color-paper-deep) 55%, transparent);
-}
-
-.article-body td strong { color: var(--color-ink); }
-
-/* "Kurz zusammengefasst" — always the first h2 of a Ratgeber article, so it is
-   styled by position rather than by a class every author has to remember. */
-.article-body > h2:first-of-type + ul {
-  background: var(--color-paper-deep);
-  border-left: 3px solid var(--color-stamp);
-  padding: 1.25rem 1.5rem 1.25rem 1.25rem;
-  margin-top: 0;
-}
-.article-body > h2:first-of-type + ul > li:first-child { margin-top: 0; }
-.article-body > h2:first-of-type + ul > li { padding-left: 1.25rem; }
-.article-body > h2:first-of-type + ul > li::before { top: 0.65em; }

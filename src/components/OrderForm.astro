@@ -1,4 +1,6 @@
 ---
+import { site } from '../config/site';
+import { formspreeAction } from '@justinguese/astro-kit/lib/site';
 /**
  * Order form for the paid rungs (Notfallkit €19, Human-Check-Paket €390).
  *
@@ -6,7 +8,7 @@
  * invoice by hand. The `tier` hidden field (via TrackingFields) is what makes a
  * submission attributable to the box it came from, so keep it distinct per rung.
  */
-import TrackingFields from './TrackingFields.astro';
+import TrackingFields from '@justinguese/astro-kit/TrackingFields.astro';
 
 interface Props {
   tier: 'notfallkit' | 'stufe2';
@@ -17,27 +19,26 @@ interface Props {
   submitLabel: string;
   /** Fine print under the button. */
   note: string;
-  /** Dark button for the Stufe-2 (file-green) box, stamp red elsewhere. */
-  accent?: 'stamp' | 'file';
+  /** Green button for the Stufe-2 box, accent red elsewhere. */
+  accent?: 'accent' | 'support';
 }
 
-const formspreeId = 'maewgpzk';
-const { tier, successFlag, successAnchor, submitLabel, note, accent = 'stamp' } = Astro.props;
+const { tier, successFlag, successAnchor, submitLabel, note, accent = 'accent' } = Astro.props;
 const landingPage = Astro.url.pathname;
 
 const buttonClass =
-  accent === 'file'
-    ? 'text-paper bg-file hover:bg-file-bright'
-    : 'text-paper bg-stamp hover:bg-[color-mix(in_srgb,var(--color-stamp)_88%,black)]';
+  accent === 'support'
+    ? 'text-canvas bg-support hover:bg-support-bright'
+    : 'text-canvas bg-accent hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,black)]';
 ---
 <form
-  action={`https://formspree.io/f/${formspreeId}`}
+  action={formspreeAction(site.formspreeId!)}
   method="POST"
   class="space-y-4"
 >
   <input type="hidden" name="form" value="bestellung" />
   <input type="hidden" name="_next" value={`${landingPage}?${successFlag}=1#${successAnchor}`} />
-  <TrackingFields tier={tier} />
+  <TrackingFields variant={tier} />
 
   <div>
     <label for={`${tier}-firma`} class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">
@@ -45,7 +46,7 @@ const buttonClass =
     </label>
     <input
       id={`${tier}-firma`} name="firma" type="text" required autocomplete="organization"
-      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+      class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
       placeholder="Ambulanter Pflegedienst Muster GmbH"
     />
   </div>
@@ -56,7 +57,7 @@ const buttonClass =
     </label>
     <input
       id={`${tier}-email`} name="email" type="email" required autocomplete="email"
-      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
+      class="w-full border-[1.5px] border-line bg-canvas px-4 py-3 text-base text-ink placeholder-ink-faint focus:outline-none focus:border-ink"
       placeholder="sie@ihr-pflegedienst.de"
     />
     <p class="mt-1 font-mono text-xs text-ink-faint">An diese Adresse gehen Rechnung und Lieferung.</p>
@@ -64,7 +65,7 @@ const buttonClass =
 
   <button
     type="submit"
-    data-tier-cta={tier}
+    data-cta={tier}
     class={`w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold transition-all shadow-[4px_4px_0_0_var(--color-ink)] hover:shadow-[2px_2px_0_0_var(--color-ink)] hover:translate-x-[2px] hover:translate-y-[2px] ${buttonClass}`}
   >
     {submitLabel}
