@@ -16,7 +16,6 @@ const landingPage = Astro.url.pathname;
 <form
   action={`https://formspree.io/f/${formspreeId}`}
   method="POST"
-  enctype="multipart/form-data"
   class="bg-paper border-[1.5px] border-ink/80 p-6 sm:p-8 space-y-5"
 >
   <input type="hidden" name="form" value="fall_einreichen" />
@@ -86,13 +85,9 @@ const landingPage = Astro.url.pathname;
 
   <BlockBFields />
 
-  <div>
-    <label for="dokumente" class="block font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Geschwärzte Dokumente hochladen</label>
-    <input
-      id="dokumente" name="dokumente" type="file" required multiple accept=".pdf,.jpg,.jpeg,.png"
-      class="w-full border-[1.5px] border-line bg-paper px-4 py-3 text-base text-ink focus:outline-none focus:border-ink file:mr-3 file:py-1 file:px-3 file:bg-ink file:text-paper file:font-mono file:text-xs file:font-bold file:border-0"
-    />
-    <p class="mt-1 font-mono text-xs text-ink-faint">PDF, JPG, PNG. Max. 5 Dateien. Bitte alle personenbezogenen Daten schwärzen.</p>
+  <div class="border-[1.5px] border-line bg-paper-deep p-4">
+    <p class="font-mono text-xs uppercase tracking-wider text-ink-faint mb-1.5">Geschwärzte Dokumente</p>
+    <p class="text-sm text-ink-soft leading-relaxed">Bitte noch nicht hochladen — nach dem Absenden erhalten Sie eine E-Mail; antworten Sie darauf mit den geschwärzten Dokumenten (PDF, JPG, PNG) im Anhang.</p>
   </div>
 
   <div class="flex items-start gap-3">
@@ -101,7 +96,7 @@ const landingPage = Astro.url.pathname;
       class="mt-1 h-5 w-5 border-[1.5px] border-line bg-paper cursor-pointer focus:outline-none focus:border-ink"
     />
     <label for="anonymity_check" class="text-sm text-ink-soft leading-relaxed cursor-pointer">
-      Ich bestätige, dass alle hochgeladenen Dokumente vollständig anonymisiert/pseudonymisiert sind und keine direkten Patientenidentifikatoren (Namen, Geburtsdatum, Adresse, Versichertennummer) enthalten.
+      Ich bestätige, dass ich ausschließlich vollständig anonymisierte/pseudonymisierte Dokumente ohne direkte Patientenidentifikatoren (Namen, Geburtsdatum, Adresse, Versichertennummer) einreichen werde.
     </label>
   </div>
 
