@@ -1,66 +1,34 @@
 ---
 import ArrowRight from '@justinguese/astro-kit/ArrowRight.astro';
 import { site } from '../config/site';
+import * as copy from '../config/copy';
 import Site from '../layouts/Site.astro';
 import HeroBlock from '@justinguese/astro-kit/HeroBlock.astro';
 import Aktendeckel from '../components/Aktendeckel.astro';
-import ValueTable from '../components/ValueTable.astro';
+import CompareBlock from '@justinguese/astro-kit/CompareBlock.astro';
 import LeadMagnetForm from '../components/LeadMagnetForm.astro';
 import OrderForm from '../components/OrderForm.astro';
 import CaseSubmitForm from '../components/CaseSubmitForm.astro';
-import SocialProof from '../components/SocialProof.astro';
-import Pricing from '../components/Pricing.astro';
+import ProofBlock from '@justinguese/astro-kit/ProofBlock.astro';
+import SectionHeader from '@justinguese/astro-kit/SectionHeader.astro';
+import PricingMatrix from '@justinguese/astro-kit/PricingMatrix.astro';
 import LeadMagnet from '../components/LeadMagnet.astro';
-import ScarcityBar from '../components/ScarcityBar.astro';
+import ScarcityBlock from '@justinguese/astro-kit/ScarcityBlock.astro';
 import DeadlineCalculator from '../components/DeadlineCalculator.astro';
-import Faq from '../components/Faq.astro';
+import FaqBlock from '@justinguese/astro-kit/FaqBlock.astro';
 import { alleArtikel, kategorieOf } from '../lib/ratgeber';
 
 // Six most recent Ratgeber articles. The homepage is the strongest page on the
 // domain, so it links out to the SEO surface directly rather than only through
 // the nav dropdown.
+const month = new Date().toLocaleDateString('de-DE', { month: 'long' });
+const stand = new Date().toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+
 const ratgeberTeaser = (await alleArtikel()).slice(0, 6);
 
 // Pain first, and priced. "Verlorene Zeit" does not move a Geschäftsführung;
 // a number with a € in front of it does.
-const szenarien = [
-  {
-    az: 'AZ. PG-01',
-    title: 'Pflegegrad-Prüfung mit kurzer Frist',
-    body: 'Der MD fordert eine Stellungnahme innerhalb weniger Tage. Verstreicht die Frist, gilt oft die Einstufung der Kasse — eine Herabstufung mit direkten Einbußen bei der Vergütung.',
-    kosten: 'Herabstufung PG 4 → PG 3: rund €280 weniger pro Monat und Klient',
-  },
-  {
-    az: 'AZ. §275-02',
-    title: '§275 SGB V Abrechnungsprüfung',
-    body: 'Die Kasse zweifelt abgerechnete Leistungen an. Ohne belegte Antwort drohen Rückforderungen bereits ausgezahlter Vergütung — rückwirkend, oft über mehrere Monate.',
-    kosten: 'Rückforderung über 6 Monate: schnell vierstellig, pro Fall',
-  },
-  {
-    az: 'AZ. FR-03',
-    title: 'Stellungnahmen mit Frist',
-    body: 'Formlose Anfragen, MDK-Gutachten, Widersprüche — wer die Frist verstreichen lässt, verliert meist das Widerspruchsrecht. Die Entscheidung der Kasse steht dann endgültig fest.',
-    kosten: 'Widerspruchsrecht verloren: der Bescheid ist bestandskräftig',
-  },
-];
 
-const wasEsNichtIst = [
-  {
-    mark: 'KEIN',
-    rest: 'automatisierter Verwaltungsakt',
-    body: 'Jede Antwort geht erst nach Ihrer Freigabe raus — nie automatisiert an Kasse oder MD.',
-  },
-  {
-    mark: 'KEIN',
-    rest: '§203-Bruch',
-    body: 'Unterlagen werden nur im Rahmen einer unterschriebenen AVV verarbeitet — niemals in ein offenes KI-Tool kopiert.',
-  },
-  {
-    mark: 'KEINE',
-    rest: 'Rechtsberatung',
-    body: 'Wir unterstützen bei der organisatorischen Aufbereitung. Die rechtliche Bewertung bleibt bei Ihnen oder Ihrer Rechtsberatung.',
-  },
-];
 ---
 <Site>
   <script type="application/ld+json" slot="head" is:inline set:html={JSON.stringify({
@@ -77,33 +45,29 @@ const wasEsNichtIst = [
 
   <!-- 1 — DER SCHMERZ. Headline benennt die Situation, nicht das Produkt. -->
   <HeroBlock
-    eyebrow="Für Pflegedienste · MVZ · Arztpraxen"
-    sub="Verpasste Fristen kosten nicht Zeit, sondern Geld — Rückforderungen und Herabstufungen. Sie laden den geschwärzten Fall hoch (rund 10 Minuten), wir liefern den quellenbelegten Antwortentwurf. Die ersten 3 Fälle sind kostenlos."
-    cta={{ label: 'Erste 3 Fälle kostenlos einreichen', href: '#fall-hochladen', track: 'stufe1' }}
-    note="Kein Vertrag · keine Kreditkarte · in 2 Minuten ausgefüllt"
-    bullets={['§203-konform', 'AVV inklusive', 'Kein automatisierter Bescheid']}
-    stats={[
-      { value: '3', label: 'Fälle kostenlos' },
-      { value: '5 Tage', label: 'bis zum Entwurf' },
-      { value: '0', label: 'Verträge nötig' }
-    ]}
+    eyebrow={copy.hero.eyebrow}
+    sub={copy.hero.sub}
+    cta={copy.hero.cta}
+    note={copy.hero.note}
+    bullets={copy.hero.bullets}
+    stats={copy.hero.stats}
   >
     {/* Headline as a slot rather than a prop, so the stamped "Frist" mark can
         sit inside it — decoration is this site's, not the shared block's. */}
     <Fragment slot="headline">
-      Prüfanfrage mit Frist auf dem Tisch?
-      <span class="tag tag-accent stamp-in align-middle ml-3 shrink-0 hidden sm:inline-flex">Frist</span>
+      {copy.hero.headline}
+      <span class="tag tag-accent stamp-in align-middle ml-3 shrink-0 hidden sm:inline-flex">{copy.hero.headlineMark}</span>
     </Fragment>
 
-    <ScarcityBar slot="urgency" variant="badge" />
+    <ScarcityBlock slot="urgency" layout="badge" period={month} {...copy.scarcity} />
     <p slot="cta-secondary" class="mt-4 text-sm text-ink-soft">
-      <span>Frist läuft in wenigen Tagen? </span>
-      <a href="#frist-rechner" class="font-semibold text-accent underline underline-offset-2 hover:text-accent-bright">Prüfen, ob die Zeit reicht →</a>
+      <span>{copy.hero.deadlineNudge.lead} </span>
+      <a href={copy.hero.deadlineNudge.href} class="font-semibold text-accent underline underline-offset-2 hover:text-accent-bright">{copy.hero.deadlineNudge.label}</a>
     </p>
 
     {/* The Aktendeckel card is this site's identity, not the block's — so it
         lives here in the aside slot rather than as a variant on a shared Hero. */}
-    <Aktendeckel />
+    <Aktendeckel {...copy.dossier} />
   </HeroBlock>
 
   <!-- 1b — Der Schmerz, konkret und beziffert. -->
@@ -115,7 +79,7 @@ const wasEsNichtIst = [
         <p class="mt-3 text-lg text-ink-soft">Nicht nur Zeit steht auf dem Spiel. Jede verpasste Frist hat eine finanzielle Konsequenz.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-line border-[1.5px] border-line">
-        {szenarien.map(s => (
+        {copy.scenarios.map(s => (
           <div class="bg-canvas p-7 flex flex-col">
             <span class="font-mono text-xs text-accent font-semibold tracking-wider">{s.az}</span>
             <h3 class="mt-3 font-display text-lg font-bold text-ink leading-snug">{s.title}</h3>
@@ -137,21 +101,13 @@ const wasEsNichtIst = [
         <h2 class="mt-4 font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">So funktioniert es — von Eingang zu Absender</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
-        <div>
-          <span class="font-mono text-3xl font-bold text-accent">01</span>
-          <h3 class="mt-3 font-display text-lg font-bold text-ink">Fall hochladen</h3>
-          <p class="mt-2 text-ink-soft leading-relaxed">Sie senden die geschwärzte Prüfanfrage über unser sicheres Formular — rund 10 Minuten Aufwand auf Ihrer Seite.</p>
-        </div>
-        <div>
-          <span class="font-mono text-3xl font-bold text-accent">02</span>
-          <h3 class="mt-3 font-display text-lg font-bold text-ink">KI-gestützter Entwurf</h3>
-          <p class="mt-2 text-ink-soft leading-relaxed">Wir erstellen einen Antwortentwurf mit Quellenverweisen aus Ihrer Pflegedokumentation. In der Regel innerhalb von 5 Werktagen bei Ihnen.</p>
-        </div>
-        <div>
-          <span class="font-mono text-3xl font-bold text-accent">03</span>
-          <h3 class="mt-3 font-display text-lg font-bold text-ink">Prüfung & Versand</h3>
-          <p class="mt-2 text-ink-soft leading-relaxed">Sie prüfen und versenden — statt 2–4 Stunden Eigenrecherche bleiben rund 30–45 Minuten Durchsicht. Sie bleiben der Absender.</p>
-        </div>
+        {copy.steps.map(step => (
+          <div>
+            <span class="font-mono text-3xl font-bold text-accent">{step.n}</span>
+            <h3 class="mt-3 font-display text-lg font-bold text-ink">{step.title}</h3>
+            <p class="mt-2 text-ink-soft leading-relaxed">{step.body}</p>
+          </div>
+        ))}
       </div>
 
       <div class="max-w-3xl border-[1.5px] border-ink/80 bg-canvas-deep p-6 sm:p-8 flex gap-4">
@@ -166,14 +122,35 @@ const wasEsNichtIst = [
   <section class="py-20 bg-canvas-deep border-y-[1.5px] border-line">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl mb-12">
-        <h2 class="font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">Manuell. Rohes ChatGPT. Oder richtig.</h2>
+        <SectionHeader as="h2" size="md" title={copy.comparison.title} />
       </div>
-      <ValueTable />
+      <CompareBlock
+        columns={copy.comparison.columns}
+        rows={copy.comparison.rows}
+        caption={copy.comparison.caption}
+        rowHeader={copy.comparison.rowHeader}
+      />
     </div>
   </section>
 
   <!-- 3 — SOCIAL PROOF. Vor dem ersten Preis, nach der Lösung. -->
-  <SocialProof />
+  {copy.proof.show && (
+    <section id="referenzen" class="py-20 bg-canvas-deep border-y-[1.5px] border-line scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl mb-12">
+          <SectionHeader as="h2" size="md" title={copy.proof.title} lead={copy.proof.lead}>
+            <span slot="eyebrow" class="tag tag-support">{copy.proof.eyebrow}</span>
+          </SectionHeader>
+        </div>
+        <ProofBlock
+          quotes={copy.proof.quotes}
+          stats={copy.proof.stats}
+          unverified={copy.proof.unverified}
+          note={copy.proof.note.replace('{stand}', stand)}
+        />
+      </div>
+    </section>
+  )}
 
   <!-- 4 — DIE ANGEBOTE, aufsteigend. Zuerst: kostenlos, ohne Dateneingabe. -->
   <section id="starthilfe" class="py-16 sm:py-20 bg-canvas scroll-mt-20">
@@ -259,7 +236,7 @@ const wasEsNichtIst = [
             </ul>
           </div>
 
-          <ScarcityBar variant="band" class="mt-6" />
+          <ScarcityBlock layout="band" period={month} {...copy.scarcity} class="mt-6" />
 
           <div class="mt-6 bg-canvas border-[1.5px] border-ink/80 p-6">
             <span class="font-mono text-xs uppercase tracking-widest text-ink-faint">Beispiel — Ablauf</span>
@@ -331,7 +308,7 @@ const wasEsNichtIst = [
             successFlag="stufe2_bestellt"
             successAnchor="stufe-2"
             submitLabel="Paket anfragen"
-            note="Sie erhalten Rechnung und Ablaufdetails per E-Mail."
+            note={copy.orderNote}
             accent="support"
           />
         </div>
@@ -346,7 +323,7 @@ const wasEsNichtIst = [
         <h2 class="font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">Was es NICHT ist</h2>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-10">
-        {wasEsNichtIst.map(item => (
+        {copy.notThis.map(item => (
           <div>
             <h3 class="font-display text-lg font-bold text-ink leading-snug">
               <span class="mark-redact">{item.mark}</span> {item.rest}
@@ -361,7 +338,28 @@ const wasEsNichtIst = [
     </div>
   </section>
 
-  <Faq />
+  <section id="faq" class="py-20 bg-canvas scroll-mt-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-12">
+        <span class="tag tag-az">{copy.faqSection.eyebrow}</span>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">
+          {copy.faqSection.title}
+        </h2>
+      </div>
+      <FaqBlock items={copy.faq} />
+
+      <!-- Risk reversal, stated once and plainly, right before the price. -->
+      <div class="mt-10 border-[1.5px] border-support bg-canvas-deep p-6 sm:p-8 flex flex-col sm:flex-row gap-5">
+      <svg class="h-8 w-8 shrink-0 text-support" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+      </svg>
+      <div>
+        <h3 class="font-display text-xl font-bold text-ink">{copy.guarantee.title}</h3>
+        <p class="mt-2 text-ink-soft leading-relaxed">{copy.guarantee.body}</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- 5b — RATGEBER. Internal links from the strongest page on the domain. -->
   <section id="ratgeber" class="py-20 bg-canvas border-t-[1.5px] border-line scroll-mt-20">
@@ -408,7 +406,45 @@ const wasEsNichtIst = [
   </section>
 
   <!-- 6 — PREISVERGLEICH, alle Stufen nebeneinander. -->
-  <Pricing />
+  <section id="preise" class="py-20 bg-canvas-deep border-y-[1.5px] border-line scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-12">
+        <span class="tag tag-az">{copy.pricing.eyebrow}</span>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl font-black tracking-tight text-ink">
+          {copy.pricing.title}
+        </h2>
+        <p class="mt-3 text-lg text-ink-soft">{copy.pricing.intro}</p>
+      </div>
+      <PricingMatrix
+        tiers={copy.pricing.tiers}
+        rows={copy.pricing.rows}
+        caption={copy.pricing.caption}
+        rowHeader={copy.pricing.rowHeader}
+        footnote={copy.pricing.footnote}
+      />
+
+      <!-- The top of the ladder: no priced column, so it gets its own band. -->
+      <div class="mt-10 border-[1.5px] border-premium bg-ink text-canvas p-7 sm:p-9 flex flex-col lg:flex-row lg:items-center gap-7">
+        <div class="flex-1">
+          <span class="tag tag-premium">{copy.pilot.eyebrow}</span>
+          <h3 class="mt-4 font-display text-2xl font-black tracking-tight">{copy.pilot.title}</h3>
+          <p class="mt-3 text-canvas/75 leading-relaxed max-w-2xl">{copy.pilot.body}</p>
+        </div>
+        <div class="shrink-0 lg:text-right">
+          <div class="font-mono text-xs uppercase tracking-widest text-canvas/50">{copy.pilot.rangeLabel}</div>
+          <div class="mt-1 font-display text-4xl font-black text-premium-bright">{copy.pilot.range}</div>
+          <a
+            href={copy.pilot.cta.href}
+            data-cta={copy.pilot.cta.track}
+            class="mt-5 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold text-ink bg-premium-bright hover:bg-[color-mix(in_srgb,var(--color-premium-bright)_88%,white)] transition-colors"
+          >
+            {copy.pilot.cta.label}
+            <ArrowRight class="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- 7 — STUFE 3 & letzter Call to Action. -->
   <section id="stufe-3" class="py-24 bg-ink text-canvas scroll-mt-20">

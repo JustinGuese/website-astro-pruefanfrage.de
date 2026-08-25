@@ -3,23 +3,19 @@
  * Block A — the free-tier e-mail gate in front of the Starthilfe templates.
  * Q1–Q3 from MARKETING.md: who they are, volume, and who answers today.
  */
-import TrackingFields from '@justinguese/astro-kit/TrackingFields.astro';
-import { formspreeAction } from '@justinguese/astro-kit/lib/site';
-import { site } from '../config/site';
+import FormBlock from '@justinguese/astro-kit/FormBlock.astro';
 import ArrowRight from '@justinguese/astro-kit/ArrowRight.astro';
 import Field from '@justinguese/astro-kit/Field.astro';
-
-const landingPage = Astro.url.pathname;
+import { site } from '../config/site';
 ---
-<form
-  action={formspreeAction(site.formspreeId!)}
-  method="POST"
+<FormBlock
+  formspreeId={site.formspreeId!}
+  variant="starthilfe"
+  name="block_a"
+  success={{ flag: 'starthilfe', anchor: 'starthilfe-download' }}
+  submitLabel="Vorlagen kostenlos anfordern"
   class="bg-canvas border-[1.5px] border-ink/80 p-6 sm:p-8 space-y-5"
 >
-  <input type="hidden" name="form" value="block_a" />
-  <input type="hidden" name="_next" value={`${landingPage}?starthilfe=1#starthilfe-download`} />
-  <TrackingFields variant="starthilfe" />
-
   <div class="grid sm:grid-cols-2 gap-5">
     <Field name="firma" label="Firma" required autocomplete="organization"
            placeholder="Ambulanter Pflegedienst Muster GmbH" />
@@ -50,12 +46,9 @@ const landingPage = Astro.url.pathname;
     { value: 'extern', label: 'Externe Beratung' },
   ]} />
 
-  <button type="submit" data-cta="starthilfe" class="btn-primary w-full">
-    Vorlagen kostenlos anfordern
-    <ArrowRight />
-  </button>
+  <ArrowRight slot="submit-icon" />
 
-  <p class="font-mono text-xs text-ink-faint text-center">
-    Kostenlos, kein Abo. Mit dem Absenden stimmen Sie unserer <a href="/datenschutz" class="underline hover:text-ink">Datenschutzerklärung</a> zu.
+  <p slot="note" class="font-mono text-xs text-ink-faint text-center">
+    Kostenlos, kein Abo. Mit dem Absenden stimmen Sie unserer <a href={site.privacyHref} class="underline hover:text-ink">Datenschutzerklärung</a> zu.
   </p>
-</form>
+</FormBlock>

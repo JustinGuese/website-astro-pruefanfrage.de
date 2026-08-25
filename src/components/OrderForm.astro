@@ -1,16 +1,15 @@
 ---
-import ArrowRight from '@justinguese/astro-kit/ArrowRight.astro';
-import { site } from '../config/site';
-import { formspreeAction } from '@justinguese/astro-kit/lib/site';
 /**
  * Order form for the paid rungs (Notfallkit €19, Human-Check-Paket €390).
  *
  * No payment provider yet — this collects the order over Formspree and you
- * invoice by hand. The `tier` hidden field (via TrackingFields) is what makes a
- * submission attributable to the box it came from, so keep it distinct per rung.
+ * invoice by hand. The `tier` is what makes a submission attributable to the box
+ * it came from, so keep it distinct per rung.
  */
-import TrackingFields from '@justinguese/astro-kit/TrackingFields.astro';
+import FormBlock from '@justinguese/astro-kit/FormBlock.astro';
+import ArrowRight from '@justinguese/astro-kit/ArrowRight.astro';
 import Field from '@justinguese/astro-kit/Field.astro';
+import { site } from '../config/site';
 
 interface Props {
   tier: 'notfallkit' | 'stufe2';
@@ -26,22 +25,16 @@ interface Props {
 }
 
 const { tier, successFlag, successAnchor, submitLabel, note, accent = 'accent' } = Astro.props;
-const landingPage = Astro.url.pathname;
-
-const buttonClass =
-  accent === 'support'
-    ? 'text-canvas bg-support hover:bg-support-bright'
-    : 'text-canvas bg-accent hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,black)]';
 ---
-<form
-  action={formspreeAction(site.formspreeId!)}
-  method="POST"
+<FormBlock
+  formspreeId={site.formspreeId!}
+  variant={tier}
+  name="bestellung"
+  success={{ flag: successFlag, anchor: successAnchor }}
+  submitLabel={submitLabel}
+  submitClass={accent === 'support' ? 'bg-support hover:bg-support-bright' : ''}
   class="space-y-4"
 >
-  <input type="hidden" name="form" value="bestellung" />
-  <input type="hidden" name="_next" value={`${landingPage}?${successFlag}=1#${successAnchor}`} />
-  <TrackingFields variant={tier} />
-
   <Field id={`${tier}-firma`} name="firma" label="Firma / Einrichtung" required
          autocomplete="organization" placeholder="Ambulanter Pflegedienst Muster GmbH" />
 
@@ -49,16 +42,9 @@ const buttonClass =
          autocomplete="email" placeholder="sie@ihr-pflegedienst.de"
          hint="An diese Adresse gehen Rechnung und Lieferung." />
 
-  <button
-    type="submit"
-    data-cta={tier}
-    class={`w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold transition-all shadow-[4px_4px_0_0_var(--color-ink)] hover:shadow-[2px_2px_0_0_var(--color-ink)] hover:translate-x-[2px] hover:translate-y-[2px] ${buttonClass}`}
-  >
-    {submitLabel}
-    <ArrowRight class="h-4 w-4" />
-  </button>
+  <ArrowRight slot="submit-icon" class="h-4 w-4" />
 
-  <p class="font-mono text-xs text-ink-faint text-center leading-relaxed">
-    {note} Mit dem Absenden stimmen Sie unserer <a href="/datenschutz" class="underline hover:text-ink">Datenschutzerklärung</a> zu.
+  <p slot="note" class="font-mono text-xs text-ink-faint text-center leading-relaxed">
+    {note} Mit dem Absenden stimmen Sie unserer <a href={site.privacyHref} class="underline hover:text-ink">Datenschutzerklärung</a> zu.
   </p>
-</form>
+</FormBlock>
