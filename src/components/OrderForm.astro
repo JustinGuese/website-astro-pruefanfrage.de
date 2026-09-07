@@ -27,7 +27,7 @@ interface Props {
 const { tier, successFlag, successAnchor, submitLabel, note, accent = 'accent' } = Astro.props;
 ---
 <FormBlock
-  formspreeId={site.formspreeId!}
+  formsBase={site.formsBase}
   variant={tier}
   name="bestellung"
   success={{ flag: successFlag, anchor: successAnchor }}

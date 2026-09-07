@@ -31,6 +31,29 @@ export const site = defineSiteConfig({
   metaPixelId: '910611952102152',
   formspreeId: 'maewgpzk',
 
+  /**
+   * Forms post to our own funnel API instead of Formspree.
+   *
+   * Three things this buys, in the order of what it cost us to be without them.
+   * Submissions become queryable — `GET /v1/export/pruefanfrage/submissions.csv`
+   * — rather than sitting in a third-party inbox nobody exports: the 13 leads
+   * this site's Meta campaign had produced by 7 Sep 2026 were invisible to every
+   * report for exactly that reason. Each submission fires a SERVER-side
+   * conversion, which the browser pixel cannot do for the share of traffic that
+   * never accepts the cookie banner. And contact data stops leaving the EU,
+   * which for a §203 audience is part of the pitch.
+   *
+   * `formspreeId` deliberately stays as the fallback: `formAction` prefers
+   * `formsBase`, so a form that forgets to pass it still reaches Formspree
+   * rather than throwing at build time or posting into the void.
+   *
+   * `PUBLIC_FORMS_BASE` overrides this at build time, so a local run can point
+   * at a dev funnel without creating real submissions.
+   */
+  formsBase:
+    import.meta.env.PUBLIC_FORMS_BASE ||
+    'https://ecommerce-api.datafortress.cloud/v1/forms/pruefanfrage',
+
   privacyHref: '/datenschutz',
 });
 
