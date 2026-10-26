@@ -1,0 +1,223 @@
+---
+/**
+ * Awwwards-tier 3D Interactive Compliance Vault component for the Hero section.
+ * Renders an interactive Three.js 3D cryptographic dossier / vault object with
+ * real-time mouse parallax and glowing particle nodes.
+ */
+interface Props {
+  aktenzeichen?: string;
+  tier?: string;
+  items?: string[];
+}
+
+const {
+  aktenzeichen = 'AZ. PN-2026-001',
+  tier = 'STUFE 1 · 3D SECURE VAULT',
+  items = [
+    'KI-Entwurf mit Paragraphen-Quellen',
+    'Vollständige §203 StGB Verschlüsselung',
+    'Sofortiger Export als rechtssichere PDF',
+  ],
+} = Astro.props;
+---
+<div class="relative mt-4 group">
+  <!-- Glowing background aura -->
+  <div class="absolute -inset-1.5 bg-gradient-to-r from-accent/40 via-support/30 to-premium/20 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+
+  <div class="relative bg-canvas/95 backdrop-blur-2xl border-[1.5px] border-accent/40 p-6 sm:p-8 rounded-xl shadow-2xl overflow-hidden">
+    <!-- 3D Three.js Canvas Container -->
+    <div id="hero-3d-container" class="w-full h-52 sm:h-60 relative rounded-lg bg-ink/5 border border-line overflow-hidden mb-6 cursor-grab active:cursor-grabbing shadow-inner">
+      <div class="absolute top-3 left-3 z-10 font-mono text-[10px] uppercase tracking-widest text-accent bg-canvas/90 px-2.5 py-1 border border-accent/30 shadow-sm">
+        LIVE 3D VAULT // §203 SECURE
+      </div>
+      <div class="absolute bottom-3 right-3 z-10 font-mono text-[9px] text-ink-faint bg-canvas/80 px-2 py-0.5 border border-line">
+        DRAG / HOVER TO ROTATE
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between pb-4 border-b border-line">
+      <span class="font-mono text-xs tracking-wider text-ink font-semibold">{aktenzeichen}</span>
+      <span class="font-mono text-xs tracking-wider text-accent font-bold px-2.5 py-1 bg-accent/10 border border-accent/20 rounded-sm">{tier}</span>
+    </div>
+
+    <p class="mt-4 font-mono text-[11px] uppercase tracking-widest text-ink-faint">Enthaltene Schutzmechanismen</p>
+    <ul class="mt-3 space-y-2.5">
+      {items.map((item) => (
+        <li class="flex items-start gap-2.5 text-sm text-ink font-medium">
+          <span class="mt-1.5 h-2 w-2 shrink-0 bg-accent rounded-full animate-pulse shadow-sm shadow-accent"></span>
+          {item}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<script>
+  import * as THREE from 'https://esm.sh/three@0.160.0';
+
+  function init3D() {
+    const container = document.getElementById('hero-3d-container');
+    if (!container) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 6;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // Create a stunning cryptographic compliance dossier / 3D secure vault object
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // Central rotating secure core (Icosahedron with high-end metallic/translucent look)
+    const geometry = new THREE.IcosahedronGeometry(1.4, 0);
+    const material = new THREE.MeshPhysicalMaterial({
+      color: 0x9a2c1c,
+      roughness: 0.15,
+      metalness: 0.85,
+      transmission: 0.2,
+      transparent: true,
+      opacity: 0.92,
+      wireframe: false
+    });
+    const coreMesh = new THREE.Mesh(geometry, material);
+    group.add(coreMesh);
+
+    // Inner glowing core
+    const innerGeo = new THREE.OctahedronGeometry(0.8, 0);
+    const innerMat = new THREE.MeshBasicMaterial({
+      color: 0xe8c468,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.7
+    });
+    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+    group.add(innerMesh);
+
+    // Wireframe outer cage
+    const wireGeometry = new THREE.IcosahedronGeometry(1.85, 1);
+    const wireMaterial = new THREE.MeshBasicMaterial({
+      color: 0x2f4a38,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.5
+    });
+    const wireMesh = new THREE.Mesh(wireGeometry, wireMaterial);
+    group.add(wireMesh);
+
+    // Orbiting particles / data nodes
+    const particleCount = 50;
+    const particleGeometry = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      particlePositions[i] = (Math.random() - 0.5) * 5.5;
+      particlePositions[i + 1] = (Math.random() - 0.5) * 5.5;
+      particlePositions[i + 2] = (Math.random() - 0.5) * 5.5;
+    }
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    const particleMaterial = new THREE.PointsMaterial({
+      color: 0x8a6a28,
+      size: 0.09,
+      transparent: true,
+      opacity: 0.9
+    });
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particles);
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xffc759, 4, 50);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
+
+    const blueLight = new THREE.PointLight(0x2f6f6b, 3, 50);
+    blueLight.position.set(-5, -5, -5);
+    scene.add(blueLight);
+
+    // Mouse interaction variables
+    let mouseX = 0;
+    let mouseY = 0;
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    let rotationMomentum = { x: 0, y: 0 };
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      mouseX = (x / rect.width) * 2 - 1;
+      mouseY = -(y / rect.height) * 2 + 1;
+
+      if (isDragging) {
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+        rotationMomentum.y = deltaX * 0.01;
+        rotationMomentum.x = deltaY * 0.01;
+        group.rotation.y += rotationMomentum.y;
+        group.rotation.x += rotationMomentum.x;
+      }
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    container.addEventListener('mousedown', () => { isDragging = true; });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    // Touch support for mobile
+    container.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const rect = container.getBoundingClientRect();
+        mouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+        mouseY = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+      }
+    }, { passive: true });
+
+    // Resize handling
+    window.addEventListener('resize', () => {
+      if (!container) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    // Animation loop
+    let clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+
+      if (!isDragging) {
+        // Smooth auto rotation combined with mouse parallax
+        group.rotation.y += (0.005 + mouseX * 0.05);
+        group.rotation.x += (0.003 + mouseY * 0.05);
+      }
+
+      wireMesh.rotation.y = -elapsedTime * 0.15;
+      wireMesh.rotation.z = elapsedTime * 0.08;
+
+      innerMesh.rotation.x = elapsedTime * 0.4;
+      innerMesh.rotation.y = elapsedTime * 0.5;
+
+      particles.rotation.y = elapsedTime * 0.04;
+
+      // Floating pulsation
+      const scale = 1 + Math.sin(elapsedTime * 2.5) * 0.04;
+      coreMesh.scale.setScalar(scale);
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init3D);
+  } else {
+    init3D();
+  }
+</script>

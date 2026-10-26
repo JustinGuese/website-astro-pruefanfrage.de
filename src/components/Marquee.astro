@@ -1,0 +1,38 @@
+---
+/**
+ * Awwwards-tier infinite scrolling velocity marquee for trust signals and compliance badges.
+ */
+interface Props {
+  items?: string[];
+}
+const { items = ['§203 STGB KONFORM', 'MDK-PRÜFUNG IN 48H', 'AI ACT ART. 26', 'DSGVO SICHER', 'KEIN ABO', '100% RECHTSKONFORM'] } = Astro.props;
+---
+<div class="relative w-full overflow-hidden bg-ink text-canvas py-4 border-y border-accent/30 shadow-lg select-none">
+  <div class="flex whitespace-nowrap animate-marquee items-center gap-10">
+    {Array(3).fill(0).map(() => (
+      <div class="flex items-center gap-10 shrink-0">
+        {items.map((item) => (
+          <div class="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-canvas/90">
+            <span class="h-2 w-2 rounded-full bg-accent shadow-sm shadow-accent animate-pulse"></span>
+            <span class="font-bold tracking-wider">{item}</span>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-33.333%); }
+  }
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+  }
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+</style>

@@ -4,7 +4,8 @@ import { site } from '../config/site';
 import * as copy from '../config/copy';
 import Site from '../layouts/Site.astro';
 import HeroBlock from '@justinguese/astro-kit/HeroBlock.astro';
-import Aktendeckel from '../components/Aktendeckel.astro';
+import Hero3DVault from '../components/Hero3DVault.astro';
+import Marquee from '../components/Marquee.astro';
 import CompareBlock from '@justinguese/astro-kit/CompareBlock.astro';
 import LeadMagnetForm from '../components/LeadMagnetForm.astro';
 import OrderForm from '../components/OrderForm.astro';
@@ -65,10 +66,11 @@ const ratgeberTeaser = (await alleArtikel()).slice(0, 6);
       <a href={copy.hero.deadlineNudge.href} class="font-semibold text-accent underline underline-offset-2 hover:text-accent-bright">{copy.hero.deadlineNudge.label}</a>
     </p>
 
-    {/* The Aktendeckel card is this site's identity, not the block's — so it
-        lives here in the aside slot rather than as a variant on a shared Hero. */}
-    <Aktendeckel {...copy.dossier} />
+    {/* The Hero3DVault card with interactive 3D Three.js animation */}
+    <Hero3DVault {...copy.dossier} />
   </HeroBlock>
+
+  <Marquee />
 
   <!-- 1b — Der Schmerz, konkret und beziffert. -->
   <section id="szenarien" class="py-20 bg-canvas-deep border-y-[1.5px] border-line scroll-mt-20">
